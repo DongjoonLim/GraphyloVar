@@ -1,12 +1,15 @@
+
 # GraphyloVar: Predicting the impact of non-coding mutations using a multi-species sequence model
 
-GraphyloVar is a deep learning model designed to extract meaningful insights from evolutionary genome data using aligned sequences and ancestral reconstructions. This guide provides step-by-step instructions for setup, data preparation, training, and prediction.
+**GraphyloVar** is a deep learning framework designed to extract meaningful insights from evolutionary genome data. By leveraging aligned sequences (MAF) and ancestral genome reconstructions, it models the evolutionary history of non-coding regions to predict functional impact.
+
+The model processes linear alignment data into **graph-structured inputs**, feeding them into a Siamese neural network architecture that combines **CNNs** (for sequence motifs), **GCNs** (for phylogenetic topology), and **LSTMs** (for sequential dependencies).
 
 [](https://www.google.com/search?q=LICENSE)
 
 ## Table of Contents
 
-  - [Introduction](https://www.google.com/search?q=%23introduction)
+  - [Data Availability Note](https://www.google.com/search?q=%23data-availability-note)
   - [Prerequisites](https://www.google.com/search?q=%23prerequisites)
   - [Installation](https://www.google.com/search?q=%23installation)
   - [Data Preparation](https://www.google.com/search?q=%23data-preparation)
@@ -14,22 +17,33 @@ GraphyloVar is a deep learning model designed to extract meaningful insights fro
   - [Training](https://www.google.com/search?q=%23training)
   - [Prediction](https://www.google.com/search?q=%23prediction)
   - [Example Workflow](https://www.google.com/search?q=%23example-workflow)
-  - [License](https://www.google.com/search?q=%23license)
+  - [Citation](https://www.google.com/search?q=%23citation)
 
-## Introduction
+-----
 
-**GraphyloVar** leverages evolutionary sequence alignments (in .maf format) and ancestral genome reconstructions to identify functional genomic elements. It processes alignment data into graph-structured inputs for a Siamese neural network architecture combining CNNs, GCNs, and LSTMs.
+## ⚠️ Data Availability Note
+
+**Please read before cloning:**
+We are currently in the process of hosting the full-scale Multi-Alignment Format (MAF) files, as well as the pre-split **Training, Validation, and Test datasets**.
+
+Because these datasets are extremely large (terabyte scale) and we are operating with limited upload bandwidth at our laboratory, this process is taking some time. We are working to make a persistent public link available as soon as possible. In the meantime, the code can be tested using the smaller example datasets provided in the `data/` folder or by generating your own inputs from the Boreoeutherian repository.
+
+-----
 
 ## Prerequisites
 
-  - Anaconda3 for package management
-  - NVIDIA GPU (recommended for training)
-  - Genome alignment data (.maf files) from [Boreoeutherian Repository](http://repo.cs.mcgill.ca/PUB/blanchem/Boreoeutherian/)
-  - BED files defining regions of interest in hg38 coordinates (see [example](https://www.google.com/search?q=data/example.bed))
+To run GraphyloVar, you will need the following environment:
+
+  * **Anaconda3** (strongly recommended for package management)
+  * **NVIDIA GPU** (required for efficient training; CPU training is possible but very slow)
+  * **Genome Alignment Data:** `.maf` files (typically from the [Boreoeutherian Repository](http://repo.cs.mcgill.ca/PUB/blanchem/Boreoeutherian/))
+  * **Regions of Interest:** BED files defining genomic coordinates (hg38). See `data/example.bed` for formatting.
 
 ## Installation
 
 ### 1\. Directory Setup
+
+Clone the repository and create the necessary subdirectories for data and model checkpoints.
 
 ```bash
 git clone https://github.com/DongjoonLim/GraphyloVar.git
@@ -37,15 +51,24 @@ cd GraphyloVar
 mkdir data Models
 ```
 
-### 2\. Create Environment (ANACONDA HAS TO BE INSTALLED FIRST\!)
+### 2\. Environment Setup
+
+> **Note:** Ensure Anaconda is installed on your system before running these commands.
 
 ```bash
-$ source .bashrc
+# Update your bash source if necessary
+source .bashrc
+
+# Create the environment from the provided yaml file
 conda env create -f environment.yml
+
+# Activate the environment
 conda activate graphylovar
 ```
 
-### 3\. Install Additional Packages
+### 3\. Install Python Dependencies
+
+Install the specific versions of the libraries required for the Siamese architecture and graph processing.
 
 ```bash
 pip install focal_loss pandas==1.3.4 spektral tensorflow==2.5.0 numpy==1.20.3 pyBigWig
@@ -53,36 +76,47 @@ pip install focal_loss pandas==1.3.4 spektral tensorflow==2.5.0 numpy==1.20.3 py
 
 ## Data Preparation
 
-### 1\. Download Alignment Data
+### Download Alignment Data
 
-Download .maf files to the `data` directory from the [Boreoeutherian Repository](http://repo.cs.mcgill.ca/PUB/blanchem/Boreoeutherian/).
+We utilize 30-way vertebrate alignments. If you are building your own dataset, please download the corresponding `.maf` files to the `data/` directory from the [Boreoeutherian Repository](http://repo.cs.mcgill.ca/PUB/blanchem/Boreoeutherian/).
+
+*(As mentioned above, pre-processed large-scale datasets will be linked here once upload is complete.)*
 
 ## Preprocessing
 
+The preprocessing pipeline converts raw MAF alignments into the graph structures required by the GCN layers.
+
 ### 1\. Convert MAF to NPY
+
+Parses the raw alignment files into a serialized numpy format.
 
 ```bash
 python3 parserPreprocess.py
 ```
 
-Output: `.pkl` file containing processed alignment data.
+*Output:* A `.pkl` or `.npy` file containing processed alignment data.
 
-### 2\. Generate Training Data
+### 2\. Generate Graph Inputs
 
-Prepare BED files with hg38 coordinates (format: `chr<number> start end label`). Example:
+You must provide a BED file containing your regions of interest. The format should be `chr start end label` (tab-separated).
 
-```bed
-chr1 1000 1001 0
-chr1 2000 2001 1
+**Example BED (`data/example_chr20.bed`):**
+
+```text
+chr20 1000 1001 0
+chr20 2000 2001 1
 ```
 
-Process training data:
+Run the graph preprocessor:
 
 ```bash
+# Syntax: python3 preprocess_graphs.py [BED_FILE] [CHROMOSOME] [OUTPUT_X] [OUTPUT_Y]
 python3 preprocess_graphs.py data/example_chr20.bed 20 data/example_X_chr20.npy data/example_y_chr20.npy
 ```
 
-### 3\. (Optional) Reverse Complement for RNA Data
+### 3\. (Optional) Reverse Complement
+
+If you are working with RNA or strand-specific data, you may need to augment the data with reverse complements:
 
 ```bash
 python3 preprocessRevComp.py
@@ -92,59 +126,66 @@ python3 preprocessRevComp.py
 
 ### 1\. Merge Chromosomal Data
 
-Combine all chromosomal data into single datasets and save them:
+Before training, it is often necessary to concatenate data from multiple chromosomes into a single training set. You can do this via a simple Python script:
 
 ```python
 import numpy as np
 
-# For features
+# Merge features (X) and labels (y) from chromosomes 1-22
 X = np.concatenate([np.load(f"data/example_X_chr{i}.npy") for i in range(1,23)], axis=0)
-
-# For labels
 y = np.concatenate([np.load(f"data/example_y_chr{i}.npy") for i in range(1,23)], axis=0)
+
+# Save the merged files
+np.save("data/full_X_train.npy", X)
+np.save("data/full_y_train.npy", y)
 ```
 
-### 2\. Start Training
+### 2\. Run Training
 
-Run `train_graphylovar_siamese.py` to train GraphyloVar with the data you have preprocessed previously.
+Use `train_graphylovar_siamese.py` to start the training loop.
 
 ```bash
-# Usage: python3 train_graphylovar_siamese.py data_path output_model_path target_path gpu numberOfCNNFilters FCNNhiddenUnits GCNhiddenUnits
-python3 train_graphylovar_siamese.py data/example_X.npy Models/model data/example_y.npy 3 32 32 32
+# Syntax: python3 train_graphylovar_siamese.py [DATA_X] [OUTPUT_MODEL_DIR] [DATA_Y] [GPU_ID] [FILTERS] [FCNN_UNITS] [GCN_UNITS]
+
+python3 train_graphylovar_siamese.py data/full_X_train.npy Models/model data/full_y_train.npy 3 32 32 32
 ```
+
+  * `GPU_ID`: The index of the GPU to use (e.g., `0` or `1`).
+  * The last three arguments control hyperparameters for the CNN filters, Fully Connected layers, and GCN layers respectively.
 
 ## Prediction
 
-Load the trained model and make predictions:
+To perform inference using a trained model:
 
 ```python
 import tensorflow as tf
+import numpy as np
 from focal_loss import BinaryFocalLoss
 
-# Load model
+# Load the trained model
+# Note: Custom objects (like FocalLoss) must be handled if saved in the model graph
 model = tf.keras.models.load_model('Models/model')
 
-# Predict on new data
+# Load your new query data (preprocessed into NPY format)
+new_data = np.load('data/query_X.npy')
+
+# Predict (outputs probability of class 1)
 predictions = model.predict(new_data, batch_size=64)[:, 1]
+print(predictions)
 ```
 
 ## Example Workflow
 
-**Scenario:** Predict functional elements in chr20 regions.
+**Scenario:** You want to predict functional elements in specific regions of Chromosome 20.
 
-1.  Prepare BED file (`data/query_regions.bed`)
-2.  Preprocess data:
+1.  **Prepare Regions:** Create `data/query_regions.bed` with your coordinates.
+2.  **Preprocess:**
     ```bash
     python3 preprocess_graphs.py data/query_regions.bed 20 data/query_X.npy data/query_y.npy
     ```
-3.  Predict:
-    ```python
-    X = np.load("data/query_X.npy")
-    predictions = model.predict(X)
-    ```
+3.  **Inference:**
+    Run the prediction script (see above) loading `data/query_X.npy`.
 
 ## License
 
-This project is licensed under the MIT License. See [LICENSE](https://www.google.com/search?q=LICENSE) for details.
-
------
+This project is licensed under the MIT License - see the [LICENSE](https://www.google.com/search?q=LICENSE) file for details.
