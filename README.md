@@ -26,7 +26,7 @@ The model processes linear alignment data into **graph-structured inputs**, feed
 **Please read before cloning:**
 We are currently in the process of hosting the full-scale Multi-Alignment Format (MAF) files, as well as the pre-split **Training, Validation, and Test datasets**.
 
-Because these datasets are extremely large (terabyte scale) and we are operating with limited upload bandwidth at our laboratory, this process is taking some time. We are working to make a persistent public link available as soon as possible. In the meantime, the code can be tested using the smaller example datasets provided in the `data/` folder or by generating your own inputs from the Boreoeutherian repository.
+Because these datasets are extremely large (terabyte scale) and we are operating with limited upload bandwidth at our laboratory, this process is taking some time. We are working to make a persistent public link available as soon as possible. 
 
 -----
 
