@@ -1,133 +1,99 @@
+
+import argparse
+import pickle
 import numpy as np
 from tqdm import tqdm
-import pickle
-import sys
 
-chromosome = sys.argv[1]
-ancSeq = ['hg38','panTro4', 'gorGor3', 'ponAbe2', 'nomLeu3', 'rheMac3', 'macFas5', 'papAnu2', 'chlSab2', 'calJac3', 'saiBol1', 'otoGar3', 'tupChi1', 
-         'speTri2', 'jacJac1', 'micOch1', 'criGri1', 'mesAur1', 'mm10', 'rn6', 'hetGla2', 'cavPor3','chiLan1', 'octDeg1',
-         'oryCun2', 'ochPri3',
-          'susScr3',
-          'vicPac2',
-           'camFer1',
-          'turTru2',
-           'orcOrc1',
-          'panHod1',
-          'bosTau8',
-          'oviAri3',
-          'capHir1',
-         'equCab2',
-           'cerSim1',
-          'felCat8',
-          'canFam3',
-          'musFur1',
-          'ailMel1','odoRosDiv1','lepWed1','pteAle1','pteVam1','eptFus1','myoDav1','myoLuc2','eriEur2','sorAra2','conCri1', 'loxAfr3','eleEdw1','triMan1','chrAsi1','echTel2','oryAfe1','dasNov3',
-          '_HP', '_HPG', '_HPGP', '_HPGPN', '_RM', '_RMP', '_RMPC', '_HPGPNRMPC', '_CS', '_HPGPNRMPCCS', '_HPGPNRMPCCSO' , '_HPGPNRMPCCSOT',
-         '_CM', '_MR', '_MCM', '_MCMMR', '_JMCMMR', '_SJMCMMR', '_CO', '_CCO', '_HCCO', '_SJMCMMRHCCO', '_OO', '_SJMCMMRHCCOOO', '_HPGPNRMPCCSOTSJMCMMRHCCOOO'
-        , '_VC', '_TO', '_OC', '_BOC', '_PBOC', '_TOPBOC', '_VCTOPBOC', '_SVCTOPBOC',
-          '_EC', '_OL', '_AOL', '_MAOL', '_CMAOL' , '_FCMAOL', '_ECFCMAOL',
-          '_PP', '_MM', '_EMM', '_PPEMM', '_ECFCMAOLPPEMM', '_SVCTOPBOCECFCMAOLPPEMM',
-          '_SC', '_ESC', '_SVCTOPBOCECFCMAOLPPEMMESC', '_HPGPNRMPCCSOTSJMCMMRHCCOOOSVCTOPBOCECFCMAOLPPEMMESC',
-          '_LE', '_LET', '_CE', '_LETCE', '_LETCEO', '_LETCEOD', '_HPGPNRMPCCSOTSJMCMMRHCCOOOSVCTOPBOCECFCMAOLPPEMMESCLETCEOD'
-         ]
-print(len(ancSeq))
-# ancSeq = ['hg38.chr2', 'panTro4.chr2A', 'gorGor3.chr2A',  '_HP', '_HPG']
+def parse_arguments():
+    parser = argparse.ArgumentParser(description="Preprocess MAF alignments to serialized NumPy/Pickle format.")
+    parser.add_argument("--chrom", type=str, required=True, help="Chromosome number (e.g., '21').")
+    parser.add_argument("--maf_path", type=str, default="../research/data/chr{chrom}.anc.maf", help="Path to MAF file (use {chrom} placeholder).")
+    parser.add_argument("--output", type=str, default="seqDictPad_chr{chrom}.pkl", help="Output file path (use {chrom} placeholder).")
+    return parser.parse_args()
 
-# desSeq = ['hg38', 'panTro4', 'gorGor3', 'ponAbe2', '_HP', '_HPG', '_HPGP' ]
-
-def ungap(anc, des):
-    a = ''
-    d = ''
-    for i in range(len(anc)):
-        if anc[i] == '-' and des[i] =='-':
+def ungap(anc: str, des: str) -> tuple:
+    """Remove positions where both ancestor and descendant are gaps."""
+    a, d = '', ''
+    for anc_char, des_char in zip(anc, des):
+        if anc_char == '-' and des_char == '-':
             continue
-        else:
-            a = a+ anc[i]
-            d = d + des[i]
-            
+        a += anc_char
+        d += des_char
     return a, d
 
-            
-def getAlign(inputList, ancSeq):
-    nucSet = set(['A','C','G','T','-'])
-    seqDict = {}
-    seqTemp = {}
-    for a in tqdm(ancSeq):
-        seqDict[a] = ['N']* inputList[0][0][1]
-    full = []
-    idList = []
-    
-    for i in tqdm(range(len(inputList))):
-        idList = []
-        lengths = []
-        
-    for i in tqdm(range(len(inputList))):            
-        for j in range(len(inputList[i])):
-            item = str(inputList[i][j][0]).split('.')[0]
-            seqDict[item].extend(list(inputList[i][j][3].upper()))
-        for item in ancSeq:
-            if i!=0 and (inputList[i][0][1] != inputList[i-1][0][1] + inputList[i-1][0][2]):
-#                 print(inputList[i][0][1], inputList[i-1][0][1], inputList[i-1][0][2])
-                seqDict[item].extend( ['N'] * (inputList[i][0][1]- inputList[i-1][0][1] - inputList[i-1][0][2]))
-        lengths = []
-        for item in ancSeq:
-#             print(seqDict[item][0])
-            lengths.append(len(seqDict[item]))
-        maximum = max(lengths)
-        minimum = min(lengths)
-        if maximum == minimum :
-            continue
-        else:
-            for item in ancSeq:
-                if len(seqDict[item]) == maximum:
-#                     print(maximum, len(seqDict[item]))
-                    continue
-                else :
-                    seqDict[item].extend(['-']*(maximum-len(seqDict[item])))
-#                     print(len(seqDict[item]))
+def get_align(input_list: list, anc_seq: list) -> dict:
+    """Build aligned sequences dictionary from MAF blocks."""
+    seq_dict = {a: ['N'] * input_list[0][0][1] for a in anc_seq}
+    for i in tqdm(range(len(input_list))):
+        for j in range(len(input_list[i])):
+            item = input_list[i][j][0].split('.')[0]
+            if item in seq_dict:
+                seq_dict[item].extend(list(input_list[i][j][3].upper()))
+        if i != 0 and (input_list[i][0][1] != input_list[i-1][0][1] + input_list[i-1][0][2]):
+            for item in anc_seq:
+                seq_dict[item].extend(['N'] * (input_list[i][0][1] - input_list[i-1][0][1] - input_list[i-1][0][2]))
+        # Pad to max length
+        lengths = [len(seq_dict[item]) for item in anc_seq]
+        max_len = max(lengths)
+        for item in anc_seq:
+            if len(seq_dict[item]) < max_len:
+                seq_dict[item].extend(['-'] * (max_len - len(seq_dict[item])))
+    return seq_dict
 
-    print(len(seqDict['hg38']))
-    return seqDict
+def main():
+    args = parse_arguments()
+    anc_seq = [
+        'hg38', 'panTro4', 'gorGor3', 'ponAbe2', 'nomLeu3', 'rheMac3', 'macFas5', 'papAnu2', 'chlSab2', 'calJac3', 'saiBol1', 'otoGar3', 'tupChi1',
+        'speTri2', 'jacJac1', 'micOch1', 'criGri1', 'mesAur1', 'mm10', 'rn6', 'hetGla2', 'cavPor3', 'chiLan1', 'octDeg1',
+        'oryCun2', 'ochPri3', 'susScr3', 'vicPac2', 'camFer1', 'turTru2', 'orcOrc1', 'panHod1', 'bosTau8', 'oviAri3', 'capHir1',
+        'equCab2', 'cerSim1', 'felCat8', 'canFam3', 'musFur1', 'ailMel1', 'odoRosDiv1', 'lepWed1', 'pteAle1', 'pteVam1', 'eptFus1',
+        'myoDav1', 'myoLuc2', 'eriEur2', 'sorAra2', 'conCri1', 'loxAfr3', 'eleEdw1', 'triMan1', 'chrAsi1', 'echTel2', 'oryAfe1', 'dasNov3',
+        '_HP', '_HPG', '_HPGP', '_HPGPN', '_RM', '_RMP', '_RMPC', '_HPGPNRMPC', '_CS', '_HPGPNRMPCCS', '_HPGPNRMPCCSO',
+        '_CM', '_MR', '_MCM', '_MCMMR', '_JMCMMR', '_SJMCMMR', '_CO', '_CCO', '_HCCO', '_SJMCMMRHCCO', '_OO', '_SJMCMMRHCCOOO', '_HPGPNRMPCCSOTSJMCMMRHCCOOO',
+        '_VC', '_TO', '_OC', '_BOC', '_PBOC', '_TOPBOC', '_VCTOPBOC', '_SVCTOPBOC',
+        '_EC', '_OL', '_AOL', '_MAOL', '_CMAOL', '_FCMAOL', '_ECFCMAOL',
+        '_PP', '_MM', '_EMM', '_PPEMM', '_ECFCMAOLPPEMM', '_SVCTOPBOCECFCMAOLPPEMM',
+        '_SC', '_ESC', '_SVCTOPBOCECFCMAOLPPEMMESC', '_HPGPNRMPCCSOTSJMCMMRHCCOOOSVCTOPBOCECFCMAOLPPEMMESC',
+        '_LE', '_LET', '_CE', '_LETCE', '_LETCEO', '_LETCEOD', '_HPGPNRMPCCSOTSJMCMMRHCCOOOSVCTOPBOCECFCMAOLPPEMMESCLETCEOD'
+    ]
+    print(f"Number of ancestor sequences: {len(anc_seq)}")
 
-# file1 = open("data/chr{}.anc.maf".format(chromosome), "rb")
-file1 = open("../research/data/chr{}.anc.maf".format(chromosome), "rb")
-Lines = file1.readlines()
-count = 0
-seqList = []
-tempList = []
-for line in Lines:
-    line=str(line,'utf-8')
-#     print(line.split())
-#     print("Line{}: {}".format(count, line.strip()))
-#     print(len(line.split()), line.split()[0])
-    if len(line.split()) == 0 :
-        if len(tempList) != 0 :
-            seqList.append(tempList)
-            tempList = []
-    elif line.split()[0] == "s":
-#         print(line.split())
-        try:
-            tempList.append([line.split()[1], int(line.split()[2]), int(line.split()[3]), line.split()[6]])
-        except:
-            print(line.split())
-            continue
-print(seqList[:1000])  
-file1.close()
-seqDictRaw = getAlign(seqList, ancSeq)
-indicies = []
-for i in tqdm(range(len(seqDictRaw['hg38']))):
-        if seqDictRaw['hg38'][i] != '-':
-            indicies.append(i)
-for key in tqdm(seqDictRaw.keys()):
-    temp = [seqDictRaw[key][i] for i in indicies]
-    # temp = ''.join(temp)
-    seqDictRaw[key] = temp
-#         temp = ''
-#         for index in indicies:
-#             temp = temp + seqDictRaw[key][index]
-#         seqDictRaw[key] = temp
-print(len(indicies))
-with open('seqDictPad_chr{}.pkl'.format(chromosome), 'wb') as handle:
-    pickle.dump(seqDictRaw, handle)
+    maf_path = args.maf_path.format(chrom=args.chrom)
+    with open(maf_path, "rb") as file:
+        lines = file.readlines()
 
-np.save('seqDictPad_chr{}.npy'.format(chromosome), seqDictRaw)
+    seq_list = []
+    temp_list = []
+    for line in lines:
+        line = str(line, 'utf-8').strip()
+        if not line:
+            if temp_list:
+                seq_list.append(temp_list)
+                temp_list = []
+        elif line.startswith("s"):
+            parts = line.split()
+            try:
+                temp_list.append([parts[1], int(parts[2]), int(parts[3]), parts[6]])
+            except ValueError:
+                print(f"Skipping invalid line: {line}")
+                continue
+    if temp_list:
+        seq_list.append(temp_list)
+
+    seq_dict_raw = get_align(seq_list, anc_seq)
+    print(f"Human sequence length: {len(seq_dict_raw['hg38'])}")
+
+    # Ungap human positions
+    indices = [i for i in range(len(seq_dict_raw['hg38'])) if seq_dict_raw['hg38'][i] != '-']
+    for key in tqdm(seq_dict_raw.keys()):
+        seq_dict_raw[key] = [seq_dict_raw[key][i] for i in indices]
+    print(f"Ungapped length: {len(indices)}")
+
+    output_path = args.output.format(chrom=args.chrom)
+    with open(output_path, 'wb') as handle:
+        pickle.dump(seq_dict_raw, handle)
+    np.save(output_path.replace('.pkl', '.npy'), seq_dict_raw)
+    print(f"Saved to {output_path}")
+
+if __name__ == "__main__":
+    main()
