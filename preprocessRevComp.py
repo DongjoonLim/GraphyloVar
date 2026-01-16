@@ -1,103 +1,46 @@
+import argparse
 import numpy as np
-import pandas as pd
 from tqdm import tqdm
-import sys
 
-transcriptionFactor = sys.argv[1]
-celltype = sys.argv[2]
+def parse_arguments():
+    parser = argparse.ArgumentParser(description="Augment data with reverse complements.")
+    parser.add_argument("--tf", type=str, required=True, help="Transcription factor (e.g., 'CTCF').")
+    parser.add_argument("--celltype", type=str, required=True, help="Cell type (e.g., 'K562').")
+    parser.add_argument("--data_dir", type=str, default="graphs/{tf}", help="Data directory (use {tf} placeholder).")
+    parser.add_argument("--length", type=int, default=1001, help="Sequence length.")
+    return parser.parse_args()
 
-transcriptionFactors = [transcriptionFactor]
-celltypes = [celltype]
-def reverseComplement(input):
-    if int(input) == 1:
-        return 5
-    elif int(input) == 5:
-        return 1
-    elif int(input) == 2:
-        return 3
-    elif (input) == 3:
-        return 2
-    else:
-        return input
+def reverse_complement(input_val: int) -> int:
+    """Map nucleotide to its reverse complement (int encoding)."""
+    mapping = {1: 5, 5: 1, 2: 3, 3: 2}
+    return mapping.get(int(input_val), input_val)
 
-def makeReverse(input):
-    output = np.zeros(input.shape)
-    a,b,c = input.shape
-    for i in tqdm(range(a)):
-        for j in range(b):
-            for k in range(c):
-                output[i,j,k] = reverseComplement(input[i,j,k])
-    return np.flip(output, axis=2)
+def main():
+    args = parse_arguments()
+    data_dir = args.data_dir.format(tf=args.tf)
+    
+    chromosomes_train = [3, 4, 5, 6, 7, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 22]
+    
+    X_train = np.load(f'{data_dir}/dataset_{args.length}_chr2_{args.tf}_{args.celltype}_X_train.npy').astype(np.uint8)
+    y_train = np.load(f'{data_dir}/dataset_{args.length}_chr2_{args.tf}_{args.celltype}_y_train.npy').astype(np.uint8)
+    
+    for chrom in tqdm(chromosomes_train):
+        X_train = np.concatenate((X_train, np.load(f'{data_dir}/dataset_{args.length}_chr{chrom}_{args.tf}_{args.celltype}_X_train.npy').astype(np.uint8)), axis=0)
+        y_train = np.concatenate((y_train, np.load(f'{data_dir}/dataset_{args.length}_chr{chrom}_{args.tf}_{args.celltype}_y_train.npy').astype(np.uint8)), axis=0)
+    
+    myfunc_vec = np.vectorize(reverse_complement)
+    result = myfunc_vec(X_train)
+    result = np.flip(result, axis=2)
+    
+    X_train_revComp = np.concatenate((X_train, result), axis=2).astype(np.uint8)
+    
+    print(f"{args.tf} {args.celltype}")
+    print(f"X shape: {X_train_revComp.shape}, y shape: {y_train.shape}")
+    
+    np.save(f'{data_dir}/X_revCompConcatenatedTrue{args.length}_{args.celltype}.npy', X_train_revComp)
+    np.save(f'{data_dir}/y_revCompConcatenatedTrue{args.length}_{args.celltype}.npy', y_train)
+    np.save(f'{data_dir}/y_revCompConcatenated{args.length}_{args.celltype}.npy', y_train)
+    print("Saved augmented files.")
 
-def get_one_hot(targets, nb_classes):
-    res = np.eye(nb_classes, dtype=np.uint8)[np.array(targets).reshape(-1)].astype('uint8')
-    return res.reshape(list(targets.shape)+[nb_classes])
-
-# for transcriptionFactor in transcriptionFactors:
-#     for celltype in celltypes: 
-#         try :
-#             encode_list = ['-', 'A', 'C', 'G', 'N', 'T']
-#             chromosomes_train = [2,3,4,5,6,7,9,10,11,12,13,14,15,16,17,18,19,20,22]
-#             chromosomes_val = []
-#             for chrom in tqdm(chromosomes_train):
-#                 X_train = np.load('graphs/{}/dataset_201_chr{}_{}_{}_X_train.npy'.format(transcriptionFactor,chrom,transcriptionFactor,   celltype)).astype(np.uint8)
-#                 y_train = np.load('graphs/{}/dataset_201_chr{}_{}_{}_y_train.npy'.format(transcriptionFactor,chrom,transcriptionFactor,   celltype)).astype(np.uint8)
-#                 # X_train301 = np.load('graphs/{}/dataset_301_chr{}_{}_{}_X_train.npy'.format(transcriptionFactor,chrom,transcriptionFactor,   celltype)).astype(np.uint8)
-#                 # y_train301 = np.load('graphs/{}/dataset_301_chr{}_{}_{}_y_train.npy'.format(transcriptionFactor,chrom,transcriptionFactor,   celltype)).astype(np.uint8)
-#                 # X_train401 = np.load('graphs/{}/dataset_401_chr{}_{}_{}_X_train.npy'.format(transcriptionFactor,chrom,transcriptionFactor,   celltype)).astype(np.uint8)
-#                 # y_train401 = np.load('graphs/{}/dataset_401_chr{}_{}_{}_y_train.npy'.format(transcriptionFactor,chrom,transcriptionFactor,   celltype)).astype(np.uint8)
-#                 np.save('graphs/{}/dataset_201_chr{}_{}_{}_X_train.npy'.format(transcriptionFactor,chrom,transcriptionFactor,   celltype), X_train.astype(np.uint8))
-#                 np.save('graphs/{}/dataset_201_chr{}_{}_{}_y_train.npy'.format(transcriptionFactor,chrom,transcriptionFactor,   celltype), y_train.astype(np.uint8))
-#                 # np.save('graphs/{}/dataset_301_chr{}_{}_{}_X_train.npy'.format(transcriptionFactor,chrom,transcriptionFactor,   celltype), X_train301.astype(np.uint8))
-#                 # np.save('graphs/{}/dataset_301_chr{}_{}_{}_y_train.npy'.format(transcriptionFactor,chrom,transcriptionFactor,   celltype), y_train301.astype(np.uint8))
-#                 # np.save('graphs/{}/dataset_401_chr{}_{}_{}_X_train.npy'.format(transcriptionFactor,chrom,transcriptionFactor,   celltype), X_train401.astype(np.uint8))
-#                 # np.save('graphs/{}/dataset_401_chr{}_{}_{}_y_train.npy'.format(transcriptionFactor,chrom,transcriptionFactor,   celltype), y_train401.astype(np.uint8))
-#         except:
-#             print('error')
-#             continue
-lengths = [1001]
-for transcriptionFactor in transcriptionFactors:
-    for celltype in celltypes: 
-        for length in lengths :
-            encode_list = ['-', 'A', 'C', 'G', 'N', 'T']
-            chromosomes_train = [3,4,5,6,7,9,10,11,12,13,14,15,16,17,18,19,20,22]
-            chromosomes_val = []
-            X_train = np.load('graphs/{}/dataset_{}_chr{}_{}_{}_X_train.npy'.format(transcriptionFactor,length,2,transcriptionFactor,   celltype)).astype(np.uint8)
-            y_train = np.load('graphs/{}/dataset_{}_chr{}_{}_{}_y_train.npy'.format(transcriptionFactor,length,2,transcriptionFactor,   celltype)).astype(np.uint8)
-            # X_val = np.load('graphs/{}/dataset_201_chr{}_{}_{}_X_train.npy'.format(tf,2,tf,   celltype))
-            # y_val = np.load('graphs/{}/dataset_201_chr{}_{}_{}_y_train.npy'.format(tf,2,tf,   celltype))
-            for chrom in tqdm(chromosomes_train):
-    #                 print(chrom)
-                X_train = np.concatenate((X_train, np.load('graphs/{}/dataset_{}_chr{}_{}_{}_X_train.npy'.format(transcriptionFactor,length,chrom,transcriptionFactor,   celltype)).astype(np.uint8)), axis=0)
-                y_train = np.concatenate((y_train, np.load('graphs/{}/dataset_{}_chr{}_{}_{}_y_train.npy'.format(transcriptionFactor,length,chrom,transcriptionFactor,   celltype)).astype(np.uint8)), axis=0)
-
-            # result = makeReverse(X_train)
-            myfunc_vec = np.vectorize(reverseComplement)
-            result = myfunc_vec(X_train)
-            # def makeReverse(input):
-            print(transcriptionFactor,celltype)
-            print(result.shape)
-            print(type(result[0,0,0]))
-            print(X_train.shape)
-            print(type(X_train[0,0,0]))
-            result =  np.flip(result, axis=2)
-            X_train_revComp = np.concatenate((X_train, result), axis=2).astype(np.uint8)
-            y_train = y_train.astype(np.uint8)
-            print(X_train_revComp.shape, y_train.shape)  
-            np.save('graphs/{}/X_revCompConcatenatedTrue{}_{}.npy'.format(transcriptionFactor,length,celltype), X_train_revComp)
-            np.save('graphs/{}/y_revCompConcatenatedTrue{}_{}.npy'.format(transcriptionFactor,length,celltype), y_train)
-            np.save('graphs/{}/y_revCompConcatenated{}_{}.npy'.format(transcriptionFactor,length,celltype), y_train)
-            # X_train_onehot = get_one_hot(X_train_revComp, 6)
-            # print(X_train_onehot.shape) 
-            # np.save('graphs/{}/X_revCompConcatenated_onehot_{}.npy'.format(transcriptionFactor,celltype), X_train_onehot)
-            # X_train_revComp = np.concatenate((X_train, result), axis=0).astype(np.uint8)
-            # y_train_revComp = np.concatenate((y_train, y_train), axis=0).astype(np.uint8)
-            # print(X_train_revComp.shape, y_train_revComp.shape)  
-            # np.save('graphs/{}/X_revCompIncluded_{}.npy'.format(transcriptionFactor,celltype), X_train_revComp.astype(np.uint8))
-            # np.save('graphs/{}/y_revCompIncluded_{}.npy'.format(transcriptionFactor,celltype), y_train_revComp.astype(np.uint8))
-
-            X_train_revComp = []
-            y_train_revComp = []
-            X_train = []
-            y_train = []
-            result = []
+if __name__ == "__main__":
+    main()
