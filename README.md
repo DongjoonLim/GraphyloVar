@@ -141,17 +141,29 @@ np.save("data/full_y_train.npy", y)
 ```
 
 ### 2\. Run Training
+Train the model using the preprocessed data.
 
-Use `train_graphylovar_siamese.py` to start the training loop.
 
-```bash
-# Syntax: python3 train_graphylovar_siamese.py [DATA_X] [OUTPUT_MODEL_DIR] [DATA_Y] [GPU_ID] [FILTERS] [FCNN_UNITS] [GCN_UNITS]
+python train.py \
+    --x_train data/processed/X_train_chr21.npy \
+    --y_train data/processed/y_train_chr21.npy \
+    --x_val data/processed/X_val_chr21.npy \
+    --y_val data/processed/y_val_chr21.npy \
+    --output_dir models/graphylo_chr21 \
+    --epochs 50 \
+    --batch_size 64
+3. Inference
+The model outputs the log-likelihood ratio (LLR) of the alternative allele vs. reference allele.
 
-python3 train_graphylovar_siamese.py data/full_X_train.npy Models/model data/full_y_train.npy 3 32 32 32
-```
+Python
 
-  * `GPU_ID`: The index of the GPU to use (e.g., `0` or `1`).
-  * The last three arguments control hyperparameters for the CNN filters, Fully Connected layers, and GCN layers respectively.
+import tensorflow as tf
+import numpy as np
+
+model = tf.keras.models.load_model('models/graphylo_chr21')
+# Load query data (must be preprocessed similarly)
+X_query = np.load('data/processed/query_data.npy') 
+predictions = model.predict(X_query)
 
 ## Prediction
 
@@ -184,7 +196,7 @@ print(predictions)
     python3 preprocess_graphs.py data/query_regions.bed 20 data/query_X.npy data/query_y.npy
     ```
 3.  **Inference:**
-    Run the prediction script (see above) loading `data/query_X.npy`.
+    Run the prediction script (see above) loading.
 
 ## License
 
