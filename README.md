@@ -3,7 +3,7 @@
 
 **GraphyloVar** is a deep learning framework designed to extract meaningful insights from evolutionary genome data. By leveraging aligned sequences (MAF) and ancestral genome reconstructions, it models the evolutionary history of non-coding regions to predict functional impact.
 
-The model processes linear alignment data into **graph-structured inputs**, feeding them into a Siamese neural network architecture that combines **CNNs** (for sequence motifs), **GCNs** (for phylogenetic topology), and **LSTMs** (for sequential dependencies).
+The model processes linear alignment data into **graph-structured inputs**, feeding them into a neural network architecture that combines **Transformer** (for sequence motifs), **GCNs** (for phylogenetic topology), (for sequential dependencies).
 
 [](https://www.google.com/search?q=LICENSE)
 
