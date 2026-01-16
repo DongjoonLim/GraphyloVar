@@ -7,6 +7,8 @@ We are currently in the process of hosting the full-scale Multi-Alignment Format
 
 Because these datasets are extremely large (terabyte scale) and we are operating with limited upload bandwidth at our laboratory, this process is taking some time. We are working to make a persistent public link available as soon as possible. 
 
+We apologize all the inconveniences from this problem.
+
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Python 3.8+](https://img.shields.io/badge/python-3.8+-blue.svg)](https://www.python.org/downloads/release/python-380/)
 [![TensorFlow 2.5](https://img.shields.io/badge/tensorflow-2.5-orange.svg)](https://www.tensorflow.org/)
