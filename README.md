@@ -396,7 +396,7 @@ We welcome contributions! See [CONTRIBUTING.md](CONTRIBUTING.md) for details:
 
 - **PhyloP/GERP**: Statistical conservation; GraphyloVar adds DL for better prediction.
 - **CADD/PrimateAI**: Similar goals but focus on coding; ours is non-coding specific.
-- **Graph Nets in Genomics**: Inspired by DeepVariant but phylogeny-focused.
+- **Graph Nets in Genomics**: Inspired by GPN-MSA but phylogeny-focused.
 
 GraphyloVar excels in incorporating tree structure.
 
