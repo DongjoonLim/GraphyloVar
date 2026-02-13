@@ -2,6 +2,22 @@
 
 This document outlines current limitations in the GraphyloVar implementation and provides guidance for extending the codebase.
 
+## CRITICAL: Security Vulnerabilities
+
+### TensorFlow 2.5.0 Security Issue
+
+**STATUS: RESOLVED** - Dependencies updated to TensorFlow 2.12.1+
+
+The original codebase used TensorFlow 2.5.0, which has **150+ known security vulnerabilities** (CVEs). This has been addressed by updating to TensorFlow 2.12.1 or later.
+
+**See [SECURITY.md](SECURITY.md) for:**
+- Complete list of vulnerabilities
+- Migration guide from TF 2.5.0 to 2.12.1+
+- Compatibility notes and breaking changes
+- Security best practices
+
+**Action Required:** All users must upgrade to TensorFlow 2.12.1+ before production use.
+
 ## Architecture Placeholders
 
 ### 1. Graph Convolutional Network (GCN) Layers

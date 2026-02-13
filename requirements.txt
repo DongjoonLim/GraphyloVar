@@ -2,12 +2,15 @@
 # Python 3.8+
 
 # Core scientific computing
-numpy==1.20.3
-pandas==1.3.4
-scikit-learn>=0.24.0
+numpy>=1.20.3,<2.0.0
+pandas>=1.3.4,<2.0.0
+scikit-learn>=0.24.0,<2.0.0
 
-# Deep learning
-tensorflow==2.5.0
+# Deep learning - SECURITY: Updated from 2.5.0 due to critical vulnerabilities
+# Minimum safe version is 2.12.1 (patches all known CVEs as of 2023)
+# WARNING: Upgrading from 2.5.0 to 2.12+ may require code changes
+# See SECURITY.md for details on vulnerabilities and migration guide
+tensorflow>=2.12.1,<2.13.0
 spektral>=1.0.0
 
 # Bioinformatics
