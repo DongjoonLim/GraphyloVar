@@ -1,5 +1,17 @@
 # GraphyloVar: A Deep Learning Framework for Predicting the Functional Impact of Non-Coding Variants Using Multi-Species Evolutionary Graphs
 
+## 🚨 CRITICAL SECURITY UPDATE
+
+**TensorFlow 2.5.0 has 150+ known vulnerabilities!**
+
+The original codebase used TensorFlow 2.5.0, which contains critical security vulnerabilities including buffer overflows, code injection, and memory corruption issues.
+
+**✅ FIXED:** Dependencies have been updated to TensorFlow 2.12.1+
+
+**Action Required:**
+- Update your environment: `pip install -r requirements.txt` or `conda env update -f environment.yml`
+- See [SECURITY.md](SECURITY.md) for migration guide and vulnerability details
+
 ## ⚠️ Data Availability Note
 
 **Please read before cloning:**
@@ -11,7 +23,7 @@ We apologize all the inconveniences from this problem.
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Python 3.8+](https://img.shields.io/badge/python-3.8+-blue.svg)](https://www.python.org/downloads/release/python-380/)
-[![TensorFlow 2.5](https://img.shields.io/badge/tensorflow-2.5-orange.svg)](https://www.tensorflow.org/)
+[![TensorFlow 2.12+](https://img.shields.io/badge/tensorflow-2.12+-orange.svg)](https://www.tensorflow.org/)
 [![GitHub issues](https://img.shields.io/github/issues/DongjoonLim/GraphyloVar.svg)](https://github.com/DongjoonLim/GraphyloVar/issues)
 [![GitHub stars](https://img.shields.io/github/stars/DongjoonLim/GraphyloVar.svg)](https://github.com/DongjoonLim/GraphyloVar/stargazers)
 [![GitHub forks](https://img.shields.io/github/forks/DongjoonLim/GraphyloVar.svg)](https://github.com/DongjoonLim/GraphyloVar/network)
