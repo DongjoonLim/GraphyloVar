@@ -435,6 +435,14 @@ mypy *.py
 
 See [CONTRIBUTING.md](CONTRIBUTING.md) for complete development guidelines.
 
+### Known Limitations
+
+Some model components (e.g., GCN layers, phylogenetic adjacency matrix) are currently placeholders to support research and experimentation. For production use, these must be properly implemented. See [LIMITATIONS.md](LIMITATIONS.md) for:
+- Detailed list of placeholder components
+- Implementation recommendations
+- Migration paths for production deployment
+- Security considerations
+
 ## Contributing Guidelines
 
 We welcome contributions! See [CONTRIBUTING.md](CONTRIBUTING.md) for details:
