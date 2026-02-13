@@ -17,4 +17,11 @@ dependencies:
   - matplotlib
   - pip
   - pip:
-    - focal_loss
+      - focal_loss
+      # Development tools (optional - uncomment to install)
+      # - pytest>=6.2.0
+      # - flake8>=4.0.0
+      # - black>=21.0
+      # - mypy>=0.910
+      # - isort>=5.9.0
+
