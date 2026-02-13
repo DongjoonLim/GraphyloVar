@@ -50,6 +50,7 @@ This repository provides all the necessary code, documentation, and examples to 
 - [Hyperparameter Tuning](#hyperparameter-tuning)
 - [Performance Evaluation](#performance-evaluation)
 - [Troubleshooting](#troubleshooting)
+- [Code Quality and Development](#code-quality-and-development)
 - [Contributing Guidelines](#contributing-guidelines)
 - [Related Work and Comparisons](#related-work-and-comparisons)
 - [Future Plans](#future-plans)
@@ -382,6 +383,57 @@ Common issues and fixes:
 - **Prediction NaNs**: Check input shapes; normalize if needed.
 
 For more, see issues or StackOverflow.
+
+## Code Quality and Development
+
+GraphyloVar now includes a comprehensive suite of code quality improvements and development tools:
+
+### Code Structure
+- **Modular Design**: Shared utilities in `config.py` (constants, hyperparameters) and `utils.py` (common functions)
+- **Consistent Imports**: All scripts use centralized configuration and utility modules
+- **No Code Duplication**: Species lists, DNA encoding, and preprocessing functions are defined once and reused
+
+### Documentation
+- **Comprehensive Docstrings**: All functions include detailed docstrings with parameter types, return values, and examples
+- **Type Hints**: Functions use Python type hints for better IDE support and code clarity
+- **CONTRIBUTING.md**: Full development guidelines including setup, testing, and PR process
+
+### Error Handling
+- **Robust Logging**: All scripts use Python's `logging` module with informative messages
+- **Input Validation**: File paths, data shapes, and parameters are validated before processing
+- **Graceful Failures**: Errors are caught and logged with helpful messages instead of crashing
+
+### Testing
+- **Unit Tests**: 30+ tests covering utility functions, configuration, and core logic
+- **Test Coverage**: Key functions for DNA processing, reverse complement, and encoding are tested
+- **Continuous Testing**: Run tests with `python -m pytest tests/ -v`
+
+### Development Tools
+- **Linting**: Configured with `flake8` for code style checking
+- **Formatting**: Pre-configured with `black` for automatic code formatting
+- **Type Checking**: Optional `mypy` support for static type analysis
+- **Security**: CodeQL analysis shows 0 vulnerabilities
+
+### Getting Started with Development
+
+```bash
+# Install development dependencies
+pip install pytest flake8 black mypy
+
+# Run tests
+python -m pytest tests/ -v
+
+# Check code style
+flake8 .
+
+# Format code
+black .
+
+# Type check (optional)
+mypy *.py
+```
+
+See [CONTRIBUTING.md](CONTRIBUTING.md) for complete development guidelines.
 
 ## Contributing Guidelines
 
