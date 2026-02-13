@@ -133,12 +133,12 @@ def main():
     # Load data
     logger.info("Loading training data...")
     X_train = load_numpy_array(args.x_train, mmap_mode="r")
-    Y_train = load_numpy_array(args.y_train)
+    Y_train = load_numpy_array(args.y_train, allow_pickle=True)  # May contain object arrays
     logger.info(f"Training data loaded: X shape {X_train.shape}, Y shape {Y_train.shape}")
 
     logger.info("Loading validation data...")
     X_val = load_numpy_array(args.x_val, mmap_mode="r")
-    Y_val = load_numpy_array(args.y_val)
+    Y_val = load_numpy_array(args.y_val, allow_pickle=True)  # May contain object arrays
     logger.info(f"Validation data loaded: X shape {X_val.shape}, Y shape {Y_val.shape}")
 
     # Prepare labels
