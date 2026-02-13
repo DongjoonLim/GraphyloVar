@@ -177,13 +177,14 @@ def save_numpy_array(array: np.ndarray, file_path: str) -> None:
         raise IOError(f"Failed to save numpy array: {e}")
 
 
-def load_numpy_array(file_path: str, mmap_mode: Optional[str] = None) -> np.ndarray:
+def load_numpy_array(file_path: str, mmap_mode: Optional[str] = None, allow_pickle: bool = False) -> np.ndarray:
     """
     Load numpy array with error handling and logging.
 
     Args:
         file_path: Path to numpy array file
         mmap_mode: Memory mapping mode ('r', 'r+', 'w+', 'c')
+        allow_pickle: Allow loading pickled object arrays (SECURITY WARNING: only use with trusted data)
 
     Returns:
         Loaded numpy array
@@ -191,11 +192,15 @@ def load_numpy_array(file_path: str, mmap_mode: Optional[str] = None) -> np.ndar
     Raises:
         FileNotFoundError: If file does not exist
         IOError: If load operation fails
+
+    Security Note:
+        Setting allow_pickle=True can execute arbitrary code if the file is malicious.
+        Only enable this for data from trusted sources.
     """
     validate_file_path(file_path, "file")
 
     try:
-        array = np.load(file_path, mmap_mode=mmap_mode, allow_pickle=True)
+        array = np.load(file_path, mmap_mode=mmap_mode, allow_pickle=allow_pickle)
         logger.info(f"Loaded array from {file_path} with shape {array.shape}")
         return array
     except Exception as e:
