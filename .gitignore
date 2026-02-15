@@ -1,0 +1,46 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.egg-info/
+dist/
+build/
+*.egg
+
+# Data (too large for git)
+*.npy
+*.pkl
+*.pickle
+*.h5
+*.hdf5
+*.bw
+*.maf
+*.bed
+*.vcf
+*.vcf.gz
+*.fa
+*.fasta
+*.gff3
+
+# Model checkpoints
+models/
+Models/
+*.ckpt*
+checkpoint
+
+# Jupyter
+.ipynb_checkpoints/
+
+# Environment
+.env
+*.log
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
