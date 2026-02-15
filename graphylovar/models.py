@@ -21,15 +21,22 @@ import tensorflow as tf
 from tensorflow.keras import Model
 from tensorflow.keras.layers import (
     Activation,
+    AdditiveAttention,
     Bidirectional,
+    Concatenate,
     Conv1D,
+    Conv2D,
     Dense,
     Dropout,
     Embedding,
     Flatten,
+    GlobalAveragePooling1D,
+    GlobalAveragePooling2D,
     Input,
     LSTM,
     LayerNormalization,
+    MaxPooling2D,
+    MaxPooling3D,
     MultiHeadAttention,
     Permute,
     Reshape,
@@ -307,6 +314,169 @@ def build_evolstm_baseline(
 
 
 # =====================================================================
+# Spatial attention (used by Conv2D models)
+# =====================================================================
+
+def spatial_attention(x, kernel_size: int = 7):
+    """
+    Spatial attention via average pooling and Conv2D.
+    Learns which spatial positions (sequence positions) are most informative.
+    """
+    avg_pool = tf.reduce_mean(x, axis=1, keepdims=True)
+    spatial = Conv2D(
+        1, (kernel_size, kernel_size), strides=1,
+        activation="sigmoid", padding="same", data_format="channels_first",
+    )(avg_pool)
+    return multiply([x, spatial])
+
+
+# =====================================================================
+# Model 5: Conv2D-GCN (2D convolutions on species × position)
+# =====================================================================
+
+def build_conv2d_gcn(
+    input_shape: tuple,
+    A: np.ndarray,
+    loss="binary_crossentropy",
+    num_classes: int = 2,
+    gcn_units: int = 32,
+    dense_units: int = 64,
+) -> Model:
+    """
+    Siamese 2-D CNN treating (species, position, one-hot) as an image.
+
+    From ``conservation/train_graphylo_siamese.py``:
+    ``model_conv3d_siamese`` / ``model_conv3d_bahdanau_onehot_human``.
+
+    Parameters
+    ----------
+    input_shape : (115, seq_len)
+    A           : adjacency matrix
+    loss        : loss function
+    """
+    seq_len = input_shape[-1]
+    half = seq_len // 2
+
+    inputs = Input(shape=input_shape, dtype="uint8")
+    x = tf.one_hot(inputs, 6)
+    x_left, x_right = tf.split(x, [half, half], axis=2)
+
+    shared_conv = Conv2D(
+        NUM_NODES, (10, 6), padding="same", activation="relu",
+        data_format="channels_first",
+    )
+    x_left = shared_conv(x_left)
+    x_right = shared_conv(x_right)
+    x_right = tf.reverse(x_right, [2])
+    x = tf.concat([x_left, x_right], axis=-1)
+
+    x = MaxPooling2D((2, 2), data_format="channels_first")(x)
+    x = Conv2D(
+        NUM_NODES, (10, 6), padding="same", activation="relu",
+        data_format="channels_first",
+    )(x)
+    x = Dropout(0.3)(x)
+    x = MaxPooling2D((2, 2), data_format="channels_first")(x)
+
+    x = Reshape((x.shape[1], -1))(x)
+    x = GCNConv(gcn_units, activation="relu", kernel_regularizer=l2(5e-4))([x, A])
+    x = Dropout(0.3)(x)
+    x = GCNConv(gcn_units, activation="relu", kernel_regularizer=l2(5e-4))([x, A])
+    x = Dropout(0.3)(x)
+    x = Flatten()(x)
+    x = Dense(dense_units, activation="relu")(x)
+    x = Dropout(0.5)(x)
+    logits = Dense(num_classes, name="logits")(x)
+    outputs = Activation("softmax", name="softmax")(logits)
+
+    model = Model(inputs=inputs, outputs=outputs)
+    model.compile(loss=loss, optimizer="adam", metrics=["accuracy"])
+    return model
+
+
+# =====================================================================
+# Model 6: Bahdanau attention (additive attention on Conv2D features)
+# =====================================================================
+
+def build_bahdanau_gcn(
+    input_shape: tuple,
+    A: np.ndarray,
+    loss="binary_crossentropy",
+    num_classes: int = 2,
+    dense_units: int = 256,
+) -> Model:
+    """
+    Conv2D encoder with Bahdanau (additive) attention → GCN classifier.
+
+    From ``conservation/train_graphylo_siamese.py``:
+    ``model_conv3d_bahdanau_onehot_human``.
+
+    The query and value branches share Conv2D weights within each half
+    (forward / reverse complement), then additive attention is applied.
+
+    Parameters
+    ----------
+    input_shape : (115, seq_len)
+    A           : adjacency matrix
+    loss        : loss function
+    """
+    seq_len = input_shape[-1]
+    half = seq_len // 2
+
+    inputs = Input(shape=input_shape, dtype="uint8")
+    x = tf.one_hot(inputs, 6)
+    x_left, x_right = tf.split(x, [half, half], axis=2)
+
+    shared_q = Conv2D(
+        32, (10, 6), padding="same", activation="relu",
+        data_format="channels_first",
+    )
+    shared_v = Conv2D(
+        32, (10, 6), padding="same", activation="relu",
+        data_format="channels_first",
+    )
+
+    # Query path
+    x_q_l = Dropout(0.3)(shared_q(x_left))
+    x_q_r = Dropout(0.3)(shared_q(x_right))
+    x_q_r = tf.reverse(x_q_r, [2])
+    x_q = tf.concat([x_q_l, x_q_r], axis=-1)
+    x_q = MaxPooling2D((2, 2), data_format="channels_first")(x_q)
+
+    # Value path
+    x_v_l = Dropout(0.3)(shared_v(x_left))
+    x_v_r = Dropout(0.3)(shared_v(x_right))
+    x_v_r = tf.reverse(x_v_r, [2])
+    x_v = tf.concat([x_v_l, x_v_r], axis=-1)
+    x_v = MaxPooling2D((2, 2), data_format="channels_first")(x_v)
+
+    # Additive attention
+    x_attn = AdditiveAttention()([x_q, x_v])
+    x = Concatenate()([x_q, x_attn])
+
+    x = Conv2D(
+        32, (10, 6), padding="same", activation="relu",
+        data_format="channels_first",
+    )(x)
+    x = Dropout(0.3)(x)
+    x = MaxPooling2D((2, 2), data_format="channels_first")(x)
+
+    # GCN tail
+    x = Reshape((x.shape[1], -1))(x)
+    x = GCNConv(32, activation="relu", kernel_regularizer=l2(5e-4))([x, A])
+    x = GCNConv(32, activation="relu", kernel_regularizer=l2(5e-4))([x, A])
+    x = Flatten()(x)
+    x = Dense(dense_units, activation="relu")(x)
+    x = Dropout(0.5)(x)
+    logits = Dense(num_classes, name="logits")(x)
+    outputs = Activation("softmax", name="softmax")(logits)
+
+    model = Model(inputs=inputs, outputs=outputs)
+    model.compile(loss=loss, optimizer="adam", metrics=["accuracy"])
+    return model
+
+
+# =====================================================================
 # Factory
 # =====================================================================
 
@@ -315,6 +485,8 @@ _REGISTRY = {
     "lstm_gcn": build_lstm_gcn,
     "transformer_gcn": build_transformer_gcn,
     "evolstm": build_evolstm_baseline,
+    "conv2d_gcn": build_conv2d_gcn,
+    "bahdanau_gcn": build_bahdanau_gcn,
 }
 
 
