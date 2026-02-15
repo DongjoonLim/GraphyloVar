@@ -29,15 +29,20 @@ GraphyloVar/
 │   ├── __init__.py
 │   ├── phylogeny.py          # 115-node species tree: species, edges, adjacency matrix
 │   ├── data.py               # Data loading, windowing, masking, train/val splitting
-│   ├── models.py             # CNN-GCN, LSTM-GCN, Transformer-GCN, EvoLSTM baseline
+│   ├── models.py             # CNN-GCN, LSTM-GCN, Transformer-GCN, Conv2D-GCN, Bahdanau-GCN, EvoLSTM
 │   ├── losses.py             # Binary focal loss for imbalanced classification
 │   ├── training.py           # Training loop with early stopping & checkpointing
-│   └── alignment.py          # Needleman-Wunsch & context-dependent alignment (EvolignSubst)
+│   ├── alignment.py          # Needleman-Wunsch & context-dependent alignment (EvolignSubst)
+│   ├── maf_parser.py         # Raw MAF file → ungapped alignment pickle
+│   └── evaluation.py         # ROC/PRC curves, AUC metrics, probability calibration
 ├── scripts/
+│   ├── parse_maf.py          # Parse raw MAF alignments per chromosome
 │   ├── preprocess.py         # Build .npy arrays from CADD VCFs + alignment pickles
 │   ├── train.py              # Train any model variant via CLI
 │   ├── predict.py            # Run inference on held-out chromosomes
-│   └── evaluate_alignment.py # Benchmark model-guided vs classical alignment
+│   ├── predict_genome.py     # Generate genome-wide bedGraph prediction tracks
+│   ├── evaluate_alignment.py # Benchmark model-guided vs classical alignment
+│   └── evaluate_clinvar.py   # Evaluate model on ClinVar pathogenic/benign variants
 ├── configs/
 │   └── default.yaml          # All hyperparameters in one place
 ├── environment.yml           # Conda environment
@@ -64,6 +69,12 @@ Bidirectional LSTM with multi-head attention per half → species attention → 
 
 ### Transformer-GCN (`transformer_gcn`)
 Embedding + positional encoding → stacked transformer encoder → species attention → GCN.
+
+### Conv2D-GCN (`conv2d_gcn`)
+2-D convolutions treating (species, position, one-hot) as an image → GCN with L2 regularization.
+
+### Bahdanau-GCN (`bahdanau_gcn`)
+Conv2D encoder with additive (Bahdanau) attention between query/value branches → GCN.
 
 ### EvoLSTM Baseline (`evolstm`)
 Single-species BiLSTM + self-attention (no phylogenetic graph).
@@ -111,7 +122,35 @@ python scripts/predict.py \
     --chromosome 22
 ```
 
-### 5. Evaluate Alignment
+### 5. Parse Raw MAF Alignments
+
+```bash
+python scripts/parse_maf.py \
+    --maf_path data/chr22.anc.maf \
+    --chromosome 22 \
+    --output_path data/seqDictPad_chr22.pkl
+```
+
+### 6. Genome-Wide Predictions (bedGraph)
+
+```bash
+python scripts/predict_genome.py \
+    --model_path models/graphylo_cadddata \
+    --alignment_pkl data/seqDictPad_chr22.pkl \
+    --chromosome 22 --start 1000000 --end 2000000 \
+    --output predictions_chr22.bed
+```
+
+### 7. Evaluate on ClinVar
+
+```bash
+python scripts/evaluate_clinvar.py \
+    --model_path models/graphylo_cadddata_focalloss \
+    --x_path data/X_clinvar.npy \
+    --y_path data/y_clinvar.npy
+```
+
+### 8. Evaluate Alignment
 
 ```bash
 python scripts/evaluate_alignment.py \
@@ -126,7 +165,7 @@ All hyperparameters live in `configs/default.yaml`. CLI arguments override confi
 
 | Parameter | Default | Description |
 |-----------|---------|-------------|
-| `model_name` | `cnn_gcn` | Architecture: `cnn_gcn`, `lstm_gcn`, `transformer_gcn`, `evolstm` |
+| `model_name` | `cnn_gcn` | Architecture: `cnn_gcn`, `lstm_gcn`, `transformer_gcn`, `conv2d_gcn`, `bahdanau_gcn`, `evolstm` |
 | `loss` | `focal` | Loss function: `focal`, `bce`, `cce` |
 | `context` | 100 | Flanking bases in preprocessing |
 | `context_flank` | 10 | Narrow window (21 bases total) |
