@@ -16,16 +16,16 @@ GraphyloVar is a deep learning framework that uses phylogenetic graph neural net
 
 ### Distinction: Graphylo vs GraphyloVar
 
-| Project | Purpose | 
-|---------|---------|
-| **Graphylo** | CNN-GCN,  protein binding site prediction | 
-| **GraphyloVar** | Variant functional impact, pretrained on allele frequencies | 
+| Project | Purpose | Input | Task |
+|---------|---------|-------|------|
+| **Graphylo** | CNN-GCN for protein binding site prediction | Alignment graph | Binary classification |
+| **GraphyloVar** | Variant functional impact scoring | Alignment graph + variant | Allele frequency regression / variant effect prediction |
 
 ## Repository Structure
 
 ```
 GraphyloVar/
-├── graphylovar/              # Python package
+├── graphylovar/              # Python package (pip-installable)
 │   ├── __init__.py
 │   ├── phylogeny.py          # 115-node species tree: species, edges, adjacency matrix
 │   ├── data.py               # Data loading, windowing, masking, train/val splitting
@@ -42,7 +42,12 @@ GraphyloVar/
 │   ├── predict.py            # Run inference on held-out chromosomes
 │   ├── predict_genome.py     # Generate genome-wide bedGraph prediction tracks
 │   ├── evaluate_alignment.py # Benchmark model-guided vs classical alignment
-│   └── evaluate_clinvar.py   # Evaluate model on ClinVar pathogenic/benign variants
+│   ├── evaluate_clinvar.py   # Evaluate model on ClinVar pathogenic/benign variants
+│   └── benchmarks/           # External benchmark comparison scripts
+│       ├── visualize_all_comparisons.py  # Comprehensive multi-benchmark visualization
+│       ├── benchmark_gnomad_balanced.py  # gnomAD common vs rare benchmark
+│       ├── add_gpnstar_comparison.py     # GPN-Star integration into MAF comparison
+│       └── score_evo2_api.py             # Score variants via NVIDIA Evo2 API
 ├── configs/
 │   └── default.yaml          # All hyperparameters in one place
 ├── environment.yml           # Conda environment
@@ -52,7 +57,7 @@ GraphyloVar/
 
 ## Model Architectures
 
-All three graph-based models share the same pipeline:
+All graph-based models share the same pipeline:
 
 1. **Input**: `(batch, 115, seq_len)` uint8 → one-hot to 6 channels `[A, C, G, T, N, -]`
 2. **Siamese split**: forward strand + reverse complement halves
@@ -78,6 +83,84 @@ Conv2D encoder with additive (Bahdanau) attention between query/value branches �
 
 ### EvoLSTM Baseline (`evolstm`)
 Single-species BiLSTM + self-attention (no phylogenetic graph).
+
+## Benchmark Results
+
+GraphyloVar has been benchmarked against a comprehensive set of variant effect prediction tools across multiple evaluation settings. All results are reproducible using the scripts in `scripts/benchmarks/`.
+
+### ClinVar Pathogenic vs Benign (songlab/clinvar_vs_benign)
+
+Evaluation on 50,164 ClinVar variants (22,254 Pathogenic / 27,910 Benign) from the [songlab/clinvar_vs_benign](https://huggingface.co/datasets/songlab/clinvar_vs_benign) benchmark:
+
+| Model | AUC | Category |
+|-------|-----|----------|
+| GPN-Star (V100, AF adj.) | 0.963 | DNA language model (alignment-aware) |
+| AlphaMissense | 0.955 | Protein structure (dbNSFP) |
+| GPN-Star (V100) | 0.925 | DNA language model (alignment-aware) |
+| ESM-1b | 0.914 | Protein language model (dbNSFP) |
+| CADD | 0.909 | Ensemble (dbNSFP) |
+| GPN-Star (M447) | 0.907 | DNA language model (alignment-aware) |
+| GPN-MSA | 0.880 | DNA language model (alignment-aware) |
+| Evo2 (40B) | 0.865 | DNA language model |
+| GPN-Star (P243) | 0.857 | DNA language model (alignment-aware) |
+| Evo2 (7B) | 0.856 | DNA language model |
+| PhyloP (V100) | 0.851 | Conservation |
+| PhyloP (M447) | 0.825 | Conservation |
+| PhastCons (V100) | 0.774 | Conservation |
+| NT (2.5B) | 0.603 | DNA language model |
+| Roulette | 0.582 | Mutation rate |
+
+### GraphyloVar ClinVar Analysis (35,613 variants)
+
+Evaluation on our curated ClinVar dataset using TOPMed allele frequency labels:
+
+| Model | AUC | Notes |
+|-------|-----|-------|
+| GPN-MSA | 0.970 | Alignment-aware DNA LM |
+| CADD | 0.966 | Ensemble integrator |
+| ESM-1b | 0.944 | Protein LM |
+| PhyloP (V100) | 0.926 | Conservation |
+| PhastCons (V100) | 0.883 | Conservation |
+| **GraphyloVar (Transformer, flank=0)** | **0.820** | **Ours** |
+| **GraphyloVar (Conditional, MLP)** | **0.804** | **Ours** |
+| **GraphyloVar (Transformer, flank=32)** | **0.789** | **Ours** |
+| **GraphyloVar (MLP)** | **0.797** | **Ours** |
+| **GraphyloVar (EvoLSTM)** | **0.694** | **Ours (no graph)** |
+| NT | 0.606 | DNA language model |
+| HyenaDNA | 0.502 | DNA language model |
+
+### gnomAD Balanced Common vs Rare (chr2, ~1M variants)
+
+Evaluation on the [songlab/gnomad_balanced](https://huggingface.co/datasets/songlab/gnomad_balanced) benchmark (distinguishing common from rare gnomAD variants):
+
+| Model | AUC |
+|-------|-----|
+| GPN-Star (M447) | 0.678 |
+| GPN-Star (P243) | 0.669 |
+| GPN-MSA | 0.665 |
+| GPN-Star (V100) | 0.635 |
+| PhyloP (P243) | 0.622 |
+| PhyloP (V100) | 0.616 |
+| Roulette | 0.578 |
+| CADD | 0.570 |
+
+## Comparison Tools Referenced
+
+The following external tools are compared in our benchmarks. Models marked **(dbNSFP)** are included in the [dbNSFP database](http://dbnsfp.org/) (v5.3.1, 36 prediction algorithms):
+
+| Tool | Type | Reference |
+|------|------|-----------|
+| **Evo2** (7B, 40B) | DNA foundation model (7B/40B params) | [Genome biology with 11,000 genomes](https://arcinstitute.org/news/evo2) |
+| **GPN-Star** (V100/M447/P243/P36) | Alignment-aware DNA language model | [songlab/gpn-msa](https://huggingface.co/songlab) |
+| **GPN-MSA** | Alignment-conditioned DNA language model | [Benegas et al. 2023](https://www.biorxiv.org/content/10.1101/2023.10.10.561776) |
+| **CADD** | Ensemble deleteriousness score **(dbNSFP)** | [Kircher et al. 2014](https://doi.org/10.1038/ng.2892) |
+| **AlphaMissense** | Protein structure-based **(dbNSFP)** | [Cheng et al. 2023](https://doi.org/10.1126/science.adg7492) |
+| **ESM-1b** | Protein language model **(dbNSFP)** | [Rives et al. 2021](https://doi.org/10.1073/pnas.2016239118) |
+| **PhyloP** | Conservation (phyloP scores) **(dbNSFP)** | [Pollard et al. 2010](https://doi.org/10.1101/gr.097857.109) |
+| **PhastCons** | Conservation (phastCons scores) **(dbNSFP)** | [Siepel et al. 2005](https://doi.org/10.1101/gr.3715005) |
+| **Nucleotide Transformer** (2.5B) | DNA foundation model | [Dalla-Torre et al. 2023](https://doi.org/10.1101/2023.01.11.523679) |
+| **HyenaDNA** | Long-range DNA model | [Nguyen et al. 2023](https://arxiv.org/abs/2306.15794) |
+| **Roulette** | Mutation rate estimation | [Samocha et al. 2017](https://doi.org/10.1038/ng.3831) |
 
 ## Quick Start
 
@@ -159,6 +242,23 @@ python scripts/evaluate_alignment.py \
     --s_species camFer1 --t_species mm10
 ```
 
+### 9. Run Comprehensive Benchmarks
+
+```bash
+# Full visualization: ClinVar + gnomAD + GraphyloVar comparisons
+python scripts/benchmarks/visualize_all_comparisons.py
+
+# gnomAD balanced benchmark only
+python scripts/benchmarks/benchmark_gnomad_balanced.py --download --chroms 2
+
+# Add GPN-Star to MAF comparison analysis
+python scripts/benchmarks/add_gpnstar_comparison.py
+
+# Score variants with Evo2 via NVIDIA API
+export NVCF_RUN_KEY=your_api_key
+python scripts/benchmarks/score_evo2_api.py --input variants.csv
+```
+
 ## Configuration
 
 All hyperparameters live in `configs/default.yaml`. CLI arguments override config values:
@@ -176,6 +276,15 @@ All hyperparameters live in `configs/default.yaml`. CLI arguments override confi
 ## Species Tree
 
 The model operates on a 115-node phylogenetic graph covering 58 extant mammalian species (from human to armadillo) plus 57 inferred ancestral nodes. During training, human (`hg38`), chimpanzee (`panTro4`), gorilla (`gorGor3`), and two ancestral nodes (`_HP`, `_HPG`) are masked to prevent information leakage.
+
+## External Benchmark Datasets
+
+Our benchmark comparisons use standardized datasets from the [Song Lab](https://huggingface.co/songlab):
+
+- **[songlab/clinvar_vs_benign](https://huggingface.co/datasets/songlab/clinvar_vs_benign)**: 50,164 ClinVar variants (Pathogenic vs Benign) with precomputed scores for 19 methods including Evo2, GPN-Star, AlphaMissense, CADD, ESM-1b, and more.
+- **[songlab/gnomad_balanced](https://huggingface.co/datasets/songlab/gnomad_balanced)**: ~12M gnomAD variants (balanced common vs rare) with precomputed scores for GPN-Star, GPN-MSA, CADD, PhyloP, PhastCons, and Roulette.
+
+These datasets provide a fair, reproducible comparison framework where all methods are evaluated on the exact same variant set.
 
 ## License
 
