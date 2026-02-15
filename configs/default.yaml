@@ -1,0 +1,46 @@
+# ──────────────────────────────────────────────────────────────────────
+# GraphyloVar default configuration
+# ──────────────────────────────────────────────────────────────────────
+
+# ── Paths ────────────────────────────────────────────────────────────
+data_dir: "data"                    # directory with X_graphylo_chr*.npy
+cadd_dir: "cadd_data"              # raw CADD VCFs
+alignment_dir: "../../conservation/data"  # seqDictPad_chr*.pkl files
+model_dir: "models"                # checkpoint output directory
+plot_dir: "plots"                  # loss curve plots
+
+# ── Data ─────────────────────────────────────────────────────────────
+chromosome: 1
+context: 100                       # flanking bases used in preprocessing
+context_flank: 10                  # narrow window: context_flank*2+1 = 21 bases
+test_size: 0.2
+random_state: 42
+mask_species: true                 # zero out human/chimp/gorilla channels
+
+# ── Model ────────────────────────────────────────────────────────────
+model_name: "cnn_gcn"              # one of: cnn_gcn, lstm_gcn, transformer_gcn, evolstm
+gcn_units: 32
+dense_units: 64
+lstm_units: 4                      # for lstm_gcn and evolstm
+transformer_heads: 4               # for transformer_gcn
+transformer_dff: 16
+transformer_layers: 6
+dropout: 0.3
+
+# ── Loss ─────────────────────────────────────────────────────────────
+loss: "focal"                      # one of: focal, bce, cce
+focal_gamma: 2.0
+focal_alpha: 0.25
+
+# ── Training ─────────────────────────────────────────────────────────
+epochs: 9999
+batch_size: 64
+patience: 7
+gpu_id: "3"                        # CUDA_VISIBLE_DEVICES
+
+# ── Alignment evaluation ────────────────────────────────────────────
+alignment:
+  gap_open: -5.0
+  gap_extend: -2.0
+  match_score: 1.0
+  mismatch_score: -1.0
