@@ -16,10 +16,10 @@ GraphyloVar is a deep learning framework that uses phylogenetic graph neural net
 
 ### Distinction: Graphylo vs GraphyloVar
 
-| Project | Purpose | Loss |
-|---------|---------|------|
-| **Graphylo** | CNN-GCN conservation / protein binding site prediction | Binary cross-entropy |
-| **GraphyloVar** | Variant functional impact, pretrained on allele frequencies | Binary focal loss |
+| Project | Purpose | 
+|---------|---------|
+| **Graphylo** | CNN-GCN,  protein binding site prediction | 
+| **GraphyloVar** | Variant functional impact, pretrained on allele frequencies | 
 
 ## Repository Structure
 
