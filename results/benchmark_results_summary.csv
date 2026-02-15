@@ -1,0 +1,52 @@
+Model,Benchmark,AUC,N_variants
+GPN-MSA,ClinVar (GraphyloVar),0.970065760646651,35613
+CADD,ClinVar (GraphyloVar),0.9662016601226677,35613
+ESM-1b,ClinVar (GraphyloVar),0.9442011740948659,31747
+PhyloP (V100),ClinVar (GraphyloVar),0.9261411632461999,35610
+PhyloP (M447),ClinVar (GraphyloVar),0.912689259394688,35591
+PhastCons (V100),ClinVar (GraphyloVar),0.8824530069468122,35610
+"GraphyloVar (Transformer, flank=0)",ClinVar (GraphyloVar),0.8198205163872095,35613
+"GraphyloVar (Conditional, MLP)",ClinVar (GraphyloVar),0.8043231046921712,35613
+"GraphyloVar (Conditional, flank=32)",ClinVar (GraphyloVar),0.7990456557400614,35613
+"GraphyloVar (Transformer, flank=8)",ClinVar (GraphyloVar),0.7975622637950891,35613
+GraphyloVar (MLP),ClinVar (GraphyloVar),0.7971659508969384,35613
+"GraphyloVar (Transformer, flank=32)",ClinVar (GraphyloVar),0.7886608915065011,35613
+GraphyloVar (Transformer),ClinVar (GraphyloVar),0.7740876184959703,35613
+"GraphyloVar (Conditional, Transformer)",ClinVar (GraphyloVar),0.7533549555366333,35613
+"GraphyloVar (Polymorphic, flank=32)",ClinVar (GraphyloVar),0.7454649895758172,35613
+"GraphyloVar (Polymorphic, MLP)",ClinVar (GraphyloVar),0.7413441939555317,35613
+"GraphyloVar (Polymorphic, Transformer)",ClinVar (GraphyloVar),0.7038189841193175,35613
+GraphyloVar (EvoLSTM),ClinVar (GraphyloVar),0.6943046923506546,35613
+NT,ClinVar (GraphyloVar),0.6057440493381342,35607
+HyenaDNA,ClinVar (GraphyloVar),0.502112939927208,35613
+"GPN-Star (V100, AF)",ClinVar (songlab),0.9627544927128266,50164
+AlphaMissense,ClinVar (songlab),0.9552291895743467,47783
+GPN-Star (V100),ClinVar (songlab),0.9252023323952373,50164
+ESM-1b,ClinVar (songlab),0.9142039194706597,48270
+CADD,ClinVar (songlab),0.9087333725277332,50164
+GPN-Star (M447),ClinVar (songlab),0.907001648695751,50164
+GPN-MSA,ClinVar (songlab),0.8802927855803249,50164
+Evo2 (40B),ClinVar (songlab),0.8651065527710637,50164
+GPN-Star (P243),ClinVar (songlab),0.8571396469870014,50164
+Evo2 (7B),ClinVar (songlab),0.8563204600402435,50164
+PhyloP (V100),ClinVar (songlab),0.8513753911269121,50164
+GPN-Star (P36),ClinVar (songlab),0.8447796155438962,50164
+PhyloP (M447),ClinVar (songlab),0.8249610865491369,50164
+PhastCons (V100),ClinVar (songlab),0.7739436349302475,50164
+PhastCons (M470),ClinVar (songlab),0.7448060565914805,50107
+PhyloP (P243),ClinVar (songlab),0.7211960765745384,49977
+PhastCons (P43),ClinVar (songlab),0.7122181174213121,50162
+NT (2.5B),ClinVar (songlab),0.6025071439135479,50164
+Roulette,ClinVar (songlab),0.5819151180025771,45950
+GPN-Star (M447),gnomAD Balanced,0.6780046868941532,987067
+GPN-Star (P243),gnomAD Balanced,0.6690428373512333,987067
+GPN-MSA,gnomAD Balanced,0.66465538518629,987067
+GPN-Star (V100),gnomAD Balanced,0.6344781440587876,987067
+PhyloP (P243),gnomAD Balanced,0.6222172761584063,975966
+PhyloP (V100),gnomAD Balanced,0.615858052334347,976970
+PhyloP (M447),gnomAD Balanced,0.5983750814027218,985291
+PhastCons (P43),gnomAD Balanced,0.5798613915319208,983432
+Roulette,gnomAD Balanced,0.5777498551147621,986332
+CADD,gnomAD Balanced,0.5697098042393772,987067
+PhastCons (V100),gnomAD Balanced,0.544756022038499,976970
+PhastCons (M470),gnomAD Balanced,0.5355797864802362,971802
