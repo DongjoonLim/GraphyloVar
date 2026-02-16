@@ -1,0 +1,25 @@
+Model,Category,AUC,AUPR,N_variants,Benchmark
+GPN-MSA,conservation,0.970066,0.971692,35613,ClinVar_TopMed
+CADD,ensemble,0.966202,0.965288,35613,ClinVar_TopMed
+ESM-1b,llm,0.944201,0.960251,31747,ClinVar_TopMed
+PhyloP (100-vert),conservation,0.926141,0.931647,35610,ClinVar_TopMed
+PhyloP (241-mam),conservation,0.912689,0.909652,35591,ClinVar_TopMed
+PhastCons (100-vert),conservation,0.882453,0.836032,35610,ClinVar_TopMed
+GraphyloVar (Cond. flank=0),graphylovar,0.848407,0.809528,35613,ClinVar_TopMed
+GraphyloVar (Poly. flank=0),graphylovar,0.825515,0.773834,35613,ClinVar_TopMed
+"GraphyloVar (Transformer, flank=0)",graphylovar,0.819821,0.781939,35613,ClinVar_TopMed
+GraphyloVar (Cond. flank=8),graphylovar,0.805299,0.783242,35613,ClinVar_TopMed
+GraphyloVar (Cond. MLP),graphylovar,0.804323,0.75815,35613,ClinVar_TopMed
+GraphyloVar (Cond. flank=32),graphylovar,0.799046,0.765184,35613,ClinVar_TopMed
+"GraphyloVar (Transformer, flank=8)",graphylovar,0.797562,0.781706,35613,ClinVar_TopMed
+GraphyloVar (MLP),graphylovar,0.797166,0.762412,35613,ClinVar_TopMed
+"GraphyloVar (Transformer, flank=32)",graphylovar,0.788661,0.764134,35613,ClinVar_TopMed
+GraphyloVar (Transformer),graphylovar,0.774088,0.742505,35613,ClinVar_TopMed
+GraphyloVar (Cond. Transformer),graphylovar,0.753355,0.719892,35613,ClinVar_TopMed
+GraphyloVar (Poly. flank=32),graphylovar,0.745465,0.706069,35613,ClinVar_TopMed
+GraphyloVar (Poly. MLP),graphylovar,0.741344,0.684554,35613,ClinVar_TopMed
+GraphyloVar (Poly. flank=8),graphylovar,0.73874,0.717123,35613,ClinVar_TopMed
+GraphyloVar (Poly. Transformer),graphylovar,0.703819,0.673135,35613,ClinVar_TopMed
+GraphyloVar (EvoLSTM),graphylovar,0.694305,0.663225,35613,ClinVar_TopMed
+NT,llm,0.605744,0.639723,35607,ClinVar_TopMed
+HyenaDNA,llm,0.502113,0.522016,35613,ClinVar_TopMed

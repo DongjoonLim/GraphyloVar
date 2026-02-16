@@ -1,0 +1,79 @@
+Model,Category,AUC,AUPR,N_variants,Benchmark
+GPN-MSA,conservation,0.970066,0.971692,35613,ClinVar_TopMed
+CADD,ensemble,0.966202,0.965288,35613,ClinVar_TopMed
+ESM-1b,llm,0.944201,0.960251,31747,ClinVar_TopMed
+PhyloP (100-vert),conservation,0.926141,0.931647,35610,ClinVar_TopMed
+PhyloP (241-mam),conservation,0.912689,0.909652,35591,ClinVar_TopMed
+PhastCons (100-vert),conservation,0.882453,0.836032,35610,ClinVar_TopMed
+GraphyloVar (Cond. flank=0),graphylovar,0.848407,0.809528,35613,ClinVar_TopMed
+GraphyloVar (Poly. flank=0),graphylovar,0.825515,0.773834,35613,ClinVar_TopMed
+"GraphyloVar (Transformer, flank=0)",graphylovar,0.819821,0.781939,35613,ClinVar_TopMed
+GraphyloVar (Cond. flank=8),graphylovar,0.805299,0.783242,35613,ClinVar_TopMed
+GraphyloVar (Cond. MLP),graphylovar,0.804323,0.75815,35613,ClinVar_TopMed
+GraphyloVar (Cond. flank=32),graphylovar,0.799046,0.765184,35613,ClinVar_TopMed
+"GraphyloVar (Transformer, flank=8)",graphylovar,0.797562,0.781706,35613,ClinVar_TopMed
+GraphyloVar (MLP),graphylovar,0.797166,0.762412,35613,ClinVar_TopMed
+"GraphyloVar (Transformer, flank=32)",graphylovar,0.788661,0.764134,35613,ClinVar_TopMed
+GraphyloVar (Transformer),graphylovar,0.774088,0.742505,35613,ClinVar_TopMed
+GraphyloVar (Cond. Transformer),graphylovar,0.753355,0.719892,35613,ClinVar_TopMed
+GraphyloVar (Poly. flank=32),graphylovar,0.745465,0.706069,35613,ClinVar_TopMed
+GraphyloVar (Poly. MLP),graphylovar,0.741344,0.684554,35613,ClinVar_TopMed
+GraphyloVar (Poly. flank=8),graphylovar,0.73874,0.717123,35613,ClinVar_TopMed
+GraphyloVar (Poly. Transformer),graphylovar,0.703819,0.673135,35613,ClinVar_TopMed
+GraphyloVar (EvoLSTM),graphylovar,0.694305,0.663225,35613,ClinVar_TopMed
+NT,llm,0.605744,0.639723,35607,ClinVar_TopMed
+HyenaDNA,llm,0.502113,0.522016,35613,ClinVar_TopMed
+"GPN-Star (V100, AF adj.)",conservation,0.993955,0.998463,21896,ClinVar_Merged
+AlphaMissense,llm,0.977928,0.996036,20697,ClinVar_Merged
+GPN-Star (V100),conservation,0.972065,0.994636,21896,ClinVar_Merged
+GPN-Star (M447),conservation,0.967477,0.993403,21896,ClinVar_Merged
+GPN-MSA,conservation,0.959325,0.991592,21896,ClinVar_Merged
+CADD,ensemble,0.958578,0.991463,21896,ClinVar_Merged
+ESM-1b,llm,0.944509,0.989181,20900,ClinVar_Merged
+GPN-Star (P243),conservation,0.934092,0.986411,21896,ClinVar_Merged
+Evo2 (40B),llm,0.926887,0.981915,21896,ClinVar_Merged
+Evo2 (7B),llm,0.925374,0.981795,21896,ClinVar_Merged
+GPN-Star (P36),conservation,0.924866,0.984107,21896,ClinVar_Merged
+PhyloP (100-vert),conservation,0.901257,0.978441,21896,ClinVar_Merged
+PhyloP (241-mam),conservation,0.897099,0.975736,21896,ClinVar_Merged
+PhastCons (100-vert),conservation,0.84055,0.94948,21896,ClinVar_Merged
+PhyloP (P243),conservation,0.823514,0.948958,21813,ClinVar_Merged
+PhastCons (M470),conservation,0.818703,0.941679,21883,ClinVar_Merged
+GraphyloVar (Cond. flank=0),graphylovar,0.81761,0.945787,21896,ClinVar_Merged
+"GraphyloVar (Transformer, flank=0)",graphylovar,0.794621,0.939991,21896,ClinVar_Merged
+PhastCons (P43),conservation,0.789652,0.943928,21896,ClinVar_Merged
+GraphyloVar (Cond. flank=8),graphylovar,0.781329,0.939667,21896,ClinVar_Merged
+GraphyloVar (Cond. MLP),graphylovar,0.779211,0.935701,21896,ClinVar_Merged
+"GraphyloVar (Transformer, flank=8)",graphylovar,0.77755,0.940331,21896,ClinVar_Merged
+GraphyloVar (MLP),graphylovar,0.775244,0.937135,21896,ClinVar_Merged
+GraphyloVar (Poly. flank=0),graphylovar,0.773601,0.928858,21896,ClinVar_Merged
+GraphyloVar (Cond. flank=32),graphylovar,0.767946,0.933574,21896,ClinVar_Merged
+"GraphyloVar (Transformer, flank=32)",graphylovar,0.763824,0.934407,21896,ClinVar_Merged
+GraphyloVar (Transformer),graphylovar,0.743437,0.925646,21896,ClinVar_Merged
+GraphyloVar (Cond. Transformer),graphylovar,0.708641,0.914811,21896,ClinVar_Merged
+GraphyloVar (EvoLSTM),graphylovar,0.695137,0.909738,21896,ClinVar_Merged
+GraphyloVar (Poly. MLP),graphylovar,0.692615,0.907093,21896,ClinVar_Merged
+GraphyloVar (Poly. flank=8),graphylovar,0.690983,0.911698,21896,ClinVar_Merged
+GraphyloVar (Poly. flank=32),graphylovar,0.68403,0.907545,21896,ClinVar_Merged
+GraphyloVar (Poly. Transformer),graphylovar,0.637515,0.893521,21896,ClinVar_Merged
+NT (2.5B),llm,0.622573,0.905257,21896,ClinVar_Merged
+Roulette,ensemble,0.541628,0.8639,21867,ClinVar_Merged
+ESM-1b,llm,0.791035,0.213665,15601,COSMIC_TopMed
+GPN-MSA,conservation,0.782027,0.34718,18903,COSMIC_TopMed
+CADD,ensemble,0.773622,0.156704,18903,COSMIC_TopMed
+GraphyloVar (Cond. flank=0),graphylovar,0.706225,0.022867,18903,COSMIC_TopMed
+PhyloP (100-vert),conservation,0.702686,0.133856,18900,COSMIC_TopMed
+PhyloP (241-mam),conservation,0.695227,0.085601,18877,COSMIC_TopMed
+GraphyloVar (Cond. MLP),graphylovar,0.690682,0.021993,18903,COSMIC_TopMed
+PhastCons (100-vert),conservation,0.689481,0.026367,18900,COSMIC_TopMed
+"GraphyloVar (Transformer, flank=0)",graphylovar,0.681937,0.017829,18903,COSMIC_TopMed
+GraphyloVar (MLP),graphylovar,0.68014,0.021212,18903,COSMIC_TopMed
+"GraphyloVar (Transformer, flank=8)",graphylovar,0.675462,0.026224,18903,COSMIC_TopMed
+GraphyloVar (Cond. flank=8),graphylovar,0.673365,0.025836,18903,COSMIC_TopMed
+GraphyloVar (Poly. flank=0),graphylovar,0.657665,0.021111,18903,COSMIC_TopMed
+GraphyloVar (Poly. MLP),graphylovar,0.639221,0.017828,18903,COSMIC_TopMed
+GraphyloVar (Transformer),graphylovar,0.63736,0.015784,18903,COSMIC_TopMed
+GraphyloVar (Cond. Transformer),graphylovar,0.627461,0.015686,18903,COSMIC_TopMed
+GraphyloVar (Poly. flank=8),graphylovar,0.620441,0.019838,18903,COSMIC_TopMed
+GraphyloVar (EvoLSTM),graphylovar,0.603172,0.013867,18903,COSMIC_TopMed
+GraphyloVar (Poly. Transformer),graphylovar,0.539351,0.012224,18903,COSMIC_TopMed
