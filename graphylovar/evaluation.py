@@ -5,12 +5,8 @@ Provides:
     - ROC / AUC computation and plotting
     - Precision-Recall / AUPRC computation and plotting
     - Probability calibration for imbalanced datasets
-    - ClinVar-style variant scoring pipeline
+    - Variant scoring pipeline (TOPMed allele frequency-based evaluation)
     - Side-by-side comparison with baselines (EvoLSTM, etc.)
-
-Original implementations scattered across:
-    - ``conservation/analysis.py``
-    - ``research/alignment/clinvar_analysis.py``
 """
 
 from __future__ import annotations
@@ -297,29 +293,29 @@ def compare_models(
     return all_results
 
 
-# ─── ClinVar scoring ────────────────────────────────────────────────
+# ─── Variant scoring (TOPMed-based evaluation) ──────────────────────
 
-def score_clinvar(
+def score_variants(
     model: tf.keras.Model,
-    X_clinvar: np.ndarray,
-    y_clinvar: np.ndarray,
+    X_variants: np.ndarray,
+    y_variants: np.ndarray,
     mask_indices: list[int] | None = None,
     model_name: str = "GraphyloVar",
     batch_size: int = 64,
     save_dir: Optional[str] = None,
 ) -> dict:
     """
-    Score ClinVar variants and evaluate AUROC / AUPRC.
+    Score variants from TOPMed and evaluate AUROC / AUPRC.
 
     Parameters
     ----------
-    model        : trained model
-    X_clinvar    : (N, 115, seq_len)  ClinVar variant feature arrays
-    y_clinvar    : (N,) binary labels (0=benign, 1=pathogenic)
-    mask_indices : species indices to zero out (hg38, apes, ancestors)
-    model_name   : label for plots
-    batch_size   : prediction batch size
-    save_dir     : directory for plots
+    model         : trained model
+    X_variants    : (N, 115, seq_len)  variant feature arrays
+    y_variants    : (N,) binary labels (0=common, 1=rare/pathogenic)
+    mask_indices  : species indices to zero out (hg38, apes, ancestors)
+    model_name    : label for plots
+    batch_size    : prediction batch size
+    save_dir      : directory for plots
 
     Returns
     -------
@@ -327,7 +323,7 @@ def score_clinvar(
     """
     from graphylovar.data import mask_species
 
-    X = X_clinvar.copy()
+    X = X_variants.copy()
     X = mask_species(X, indices=mask_indices)
 
     preds = model.predict(X, batch_size=batch_size)
@@ -336,20 +332,20 @@ def score_clinvar(
     else:
         scores = preds.ravel()
 
-    y = y_clinvar if y_clinvar.ndim == 1 else y_clinvar[:, 1]
+    y = y_variants if y_variants.ndim == 1 else y_variants[:, 1]
 
     roc_result = compute_roc(y, scores)
     prc_result = compute_prc(y, scores)
 
-    print(f"[ClinVar {model_name}]  AUROC: {roc_result['auc']:.4f}  |  AUPRC: {prc_result['auprc']:.4f}")
+    print(f"[{model_name}]  AUROC: {roc_result['auc']:.4f}  |  AUPRC: {prc_result['auprc']:.4f}")
 
     if save_dir:
         plot_roc(roc_result, names=[model_name],
-                 save_path=os.path.join(save_dir, f"clinvar_roc_{model_name}.png"),
-                 title=f"ClinVar ROC – {model_name}")
+                 save_path=os.path.join(save_dir, f"roc_{model_name}.png"),
+                 title=f"ROC – {model_name}")
         plot_prc(prc_result, names=[model_name],
-                 save_path=os.path.join(save_dir, f"clinvar_prc_{model_name}.png"),
-                 title=f"ClinVar PRC – {model_name}")
+                 save_path=os.path.join(save_dir, f"prc_{model_name}.png"),
+                 title=f"PRC – {model_name}")
 
     return {
         "auroc": roc_result["auc"],

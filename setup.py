@@ -34,7 +34,6 @@ setup(
             "graphylovar-train=scripts.train:main",
             "graphylovar-predict=scripts.predict:main",
             "graphylovar-predict-genome=scripts.predict_genome:main",
-            "graphylovar-clinvar=scripts.evaluate_clinvar:main",
             "graphylovar-parse-maf=scripts.parse_maf:main",
         ],
     },
