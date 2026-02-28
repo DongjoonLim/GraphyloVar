@@ -1,0 +1,53 @@
+{
+    "title": "GraphyloVar: Phylogenetic Graph Neural Network for Non-Coding Variant Effect Prediction",
+    "description": "GraphyloVar is a deep learning tool for predicting the functional impact of genetic variants across the human genome. The model uses a phylogenetic graph convolutional network (GCN) on multi-species whole-genome alignments to learn species-specific conservation weights from the evolutionary tree topology. The phylogenetic tree includes 58 extant mammalian species and 57 inferred ancestral sequences, forming 115 nodes total. The upstream encoder accepts either a 1D CNN, a bidirectional LSTM, or a Transformer architecture, and all variants share a common GCN tail that propagates features along the edges of the Boreoeutherian evolutionary tree. This repository contains the full source code for the graphylovar Python package, pretrained model weights, configuration files, evaluation benchmarks on TOPMed variant data and MPRA expression data, and scripts for reproducing all results in the paper. GraphyloVar achieves an AUC of 0.664 on the MAF benchmark across all genomic categories, outperforming CADD (0.566), GPN-MSA (0.610), GPN-Star (0.598), PhyloP (0.599), PhastCons (0.536), and Enformer (0.549). On the TOPMed pathogenicity benchmark, the model achieves an AUC of 0.848 using only the alignment at the variant position without any protein-level features.",
+    "creators": [
+        {
+            "name": "Lim, Dongjoon",
+            "affiliation": "School of Computer Science, McGill University",
+            "orcid": ""
+        },
+        {
+            "name": "Blanchette, Mathieu",
+            "affiliation": "School of Computer Science, McGill University",
+            "orcid": ""
+        }
+    ],
+    "upload_type": "software",
+    "access_right": "open",
+    "license": "MIT",
+    "keywords": [
+        "bioinformatics",
+        "deep learning",
+        "graph neural network",
+        "graph convolutional network",
+        "variant effect prediction",
+        "non-coding variants",
+        "phylogenetics",
+        "multiple sequence alignment",
+        "conservation",
+        "genomics",
+        "GCN",
+        "transformer",
+        "TOPMed",
+        "MPRA",
+        "evolutionary tree",
+        "Boreoeutheria"
+    ],
+    "related_identifiers": [
+        {
+            "identifier": "https://github.com/DongjoonLim/GraphyloVar",
+            "relation": "isSupplementTo",
+            "resource_type": "software"
+        }
+    ],
+    "communities": [
+        {
+            "identifier": "zenodo"
+        }
+    ],
+    "notes": "This software was developed at McGill University as part of the doctoral research of Dongjoon Lim under the supervision of Professor Mathieu Blanchette. The trained model weights and evaluation datasets are included in the Zenodo deposit. The full multi-species whole-genome alignments (~500 GB for all chromosomes) are available from the UCSC Genome Browser at https://hgdownload.cse.ucsc.edu/goldenPath/hg38/multiz100way/ and are not included in this deposit due to their size. Preprocessing scripts for downloading and parsing the alignment data are provided in the repository. The model was trained and evaluated using 6 NVIDIA Quadro RTX 6000 GPUs (24 GB each) running TensorFlow 2.4 with Python 3.8.",
+    "version": "1.0.0",
+    "language": "eng",
+    "grants": []
+}

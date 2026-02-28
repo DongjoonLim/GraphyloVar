@@ -1,3 +1,5 @@
+# Copyright (c) 2025 Dongjoon Lim, McGill University
+# Licensed under the MIT License. See LICENSE file in the project root.
 from setuptools import setup, find_packages
 
 setup(

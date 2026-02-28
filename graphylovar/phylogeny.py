@@ -1,3 +1,5 @@
+# Copyright (c) 2025 Dongjoon Lim, McGill University
+# Licensed under the MIT License. See LICENSE file in the project root.
 """
 Single source of truth for the 115-node mammalian phylogenetic graph
 used across all GraphyloVar / Graphylo models.

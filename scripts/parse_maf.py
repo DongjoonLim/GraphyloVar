@@ -1,4 +1,6 @@
 #!/usr/bin/env python
+# Copyright (c) 2025 Dongjoon Lim, McGill University
+# Licensed under the MIT License. See LICENSE file in the project root.
 """
 Parse raw MAF alignment files into pickle dictionaries.
 

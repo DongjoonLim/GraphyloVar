@@ -1,4 +1,6 @@
 #!/usr/bin/env python
+# Copyright (c) 2025 Dongjoon Lim, McGill University
+# Licensed under the MIT License. See LICENSE file in the project root.
 """
 Score variants with Evo2 via NVIDIA NIM API.
 

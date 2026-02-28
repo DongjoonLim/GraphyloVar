@@ -1,0 +1,20 @@
+% Spearman correlation table
+\begin{table}[htbp]
+\centering
+\small
+\caption{Spearman correlation between model predictions.}
+\label{tab:spearman_corr}
+\begin{tabular}{lccccccc}
+\toprule
+& GraphyloVar & CADD & Enformer & PhastCons & PhyloP & GPN-MSA & GPN-Star \\
+\midrule
+GraphyloVar & 1.000 & 0.180 & 0.196 & 0.133 & 0.220 & 0.271 & 0.276 \\
+CADD & 0.180 & 1.000 & 0.797 & 0.566 & 0.640 & 0.232 & 0.206 \\
+Enformer & 0.196 & 0.797 & 1.000 & 0.587 & 0.651 & 0.298 & 0.265 \\
+PhastCons & 0.133 & 0.566 & 0.587 & 1.000 & 0.571 & 0.099 & -0.006 \\
+PhyloP & 0.220 & 0.640 & 0.651 & 0.571 & 1.000 & 0.396 & 0.374 \\
+GPN-MSA & 0.271 & 0.232 & 0.298 & 0.099 & 0.396 & 1.000 & 0.904 \\
+GPN-Star & 0.276 & 0.206 & 0.265 & -0.006 & 0.374 & 0.904 & 1.000 \\
+\bottomrule
+\end{tabular}
+\end{table}

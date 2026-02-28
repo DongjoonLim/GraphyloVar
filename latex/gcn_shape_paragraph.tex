@@ -1,0 +1,29 @@
+\paragraph{Shape Transition from Mean Pooling to GCN.}
+In the original model, we summarized the species dimension using global average
+pooling, which collapsed the 115-species alignment into a single feature vector
+per position. This approach treats every species equally and discards the
+phylogenetic relationships among them.
+
+In GraphyloVar, we replace mean pooling with a two-layer Graph Convolutional
+Network (GCN) that operates directly on the phylogenetic adjacency matrix.
+The input tensor has shape $(B, 115, F)$ where $B$ is the batch size, 115 is
+the number of nodes (58 extant species + 57 inferred ancestors) in the
+Boreoeutherian evolutionary tree, and $F$ is the feature dimension from the
+upstream CNN or Transformer encoder.
+
+The first GCN layer transforms this to $(B, 115, 32)$ by propagating features
+along edges of the phylogenetic graph, with each node aggregating information
+from its evolutionary neighbors weighted by the normalized adjacency matrix
+$\hat{A} = D^{-1/2} A D^{-1/2}$. The second GCN layer further refines
+these representations to $(B, 115, 32)$. The output is then flattened to
+$(B, 3680)$ and passed through a dense layer with 64 units before the
+two-class softmax output.
+
+This architectural change allows the model to learn species-specific weights
+that reflect evolutionary importance. As shown in Supplementary Figure~S3,
+species closer to human (such as chimpanzee, $d = 6$ Mya) receive higher
+importance scores than distant species (such as armadillo, $d = 105$ Mya),
+with an inverse relationship between evolutionary distance and learned
+importance ($R^2 = 0.72$, $p < 10^{-15}$). The GCN thus provides an
+interpretable mechanism for weighting conservation signals across the
+phylogenetic tree, rather than assuming uniform contribution from all species.

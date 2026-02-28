@@ -1,0 +1,23 @@
+\paragraph{Comparison with PHACT and PHACTboost.}
+PHACT~\cite{kim2021phact} and its gradient-boosted extension
+PHACTboost~\cite{kim2023phactboost} predict variant pathogenicity using
+protein-level features including amino acid conservation, protein structure,
+and functional domain annotations. These tools are designed specifically for
+missense variants in protein-coding regions and require protein sequence
+and structural context as input.
+
+GraphyloVar operates in a fundamentally different scope: it predicts the
+functional impact of both coding and non-coding variants using only the
+multi-species whole-genome alignment, without any protein-level features.
+More than 98\% of the human genome is non-coding, and the majority of
+disease-associated variants identified by GWAS fall in non-coding regions
+where PHACT and PHACTboost cannot be applied.
+
+The two approaches are therefore complementary rather than competing.
+PHACT provides high accuracy for missense variant interpretation by
+leveraging protein context, while GraphyloVar provides genome-wide
+coverage by learning conservation patterns from the evolutionary tree.
+For coding variants, a natural extension would be to combine both
+predictions in an ensemble framework, using PHACT for protein-level
+features and GraphyloVar for alignment-level phylogenetic features.
+We leave this interesting combination for future work.

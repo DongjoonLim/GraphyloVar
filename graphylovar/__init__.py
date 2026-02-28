@@ -1,3 +1,5 @@
+# Copyright (c) 2025 Dongjoon Lim, McGill University
+# Licensed under the MIT License. See LICENSE file in the project root.
 """
 GraphyloVar: Deep Learning for Predicting Functional Impact of
 Non-Coding Variants Using Multi-Species Evolutionary Graphs.
