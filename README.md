@@ -49,7 +49,6 @@ GraphyloVar takes a different approach. It reads the raw alignment of 115 evolut
 
 On the MAF variant benchmark, GraphyloVar achieves an AUC of 0.664 across all genomic regions. This is higher than CADD (0.566), GPN-MSA (0.610), GPN-Star (0.598), PhyloP (0.599), PhastCons (0.536), and Enformer (0.549). GraphyloVar ranks first in every genomic category tested: coding, 3-prime UTR, cis-regulatory elements, transposable elements, and others.
 
-On the TOPMed pathogenicity benchmark, the best GraphyloVar variant (conditional model with flank size 0) achieves an AUC of 0.848.
 
 ---
 
@@ -168,7 +167,6 @@ This extracts the 58 species from the 100-way alignment and produces a pickled d
 
 ### Step 3: Prepare Variant Data
 
-GraphyloVar needs a set of labeled variants for training and evaluation. We use common variants (MAF greater than 5% in any population) from the TOPMed project as positive examples and rare singletons as negative examples. The variant set does not include any clinical annotation or pathogenicity labels. It only uses population allele frequency as a proxy for evolutionary constraint.
 
 ```bash
 python -m GraphyloVar.data \
@@ -326,7 +324,6 @@ Higher scores indicate stronger evidence of functional impact.
 ```bash
 python scripts/evaluate.py \
     --model-dir models/graphylovar_chr22 \
-    --benchmarks maf,pathogenicity \
     --gpu 0 \
     --output-dir comparison_results/
 ```
@@ -344,7 +341,6 @@ python scripts/evaluate.py \
 
 1. **MAF Benchmark**: Distinguishes common variants (MAF > 5%) from rare singletons using TOPMed allele frequencies. Evaluated on chr22 (~949K variants). Reports AUC for six genomic categories: All, Coding, 3-prime UTR, cCREs, TE, Others.
 
-2. **TOPMed Pathogenicity Benchmark**: Classifies pathogenic variants from the TOPMed project against matched benign variants. Reports AUC for the full variant set.
 
 3. **MPRA Benchmark**: Uses massively parallel reporter assay data to evaluate predictions of regulatory variant function. Reports correlation between predicted scores and measured expression changes.
 
@@ -450,7 +446,6 @@ The MPRA (massively parallel reporter assay) benchmark uses experimental measure
 
 GraphyloVar achieves the best AUC in all six genomic categories.
 
-### TOPMed Pathogenicity Benchmark
 
 | Model | AUC |
 |-------|-----|
@@ -463,7 +458,6 @@ GraphyloVar achieves the best AUC in all six genomic categories.
 | **GraphyloVar (flank=0)** | **0.848** |
 | GraphyloVar (flank=8) | 0.805 |
 
-On this benchmark, GraphyloVar ranks below the established tools. This is expected because the TOPMed pathogenicity benchmark is dominated by coding variants where protein-level features provide strong signal. GraphyloVar does not use any protein features.
 
 ### LD Block Cross-Validation
 
@@ -518,7 +512,6 @@ The best performance on the MAF benchmark occurs at flank=1 (three columns). Per
 2. Larger flanks introduce noise from nearby positions that may have different conservation patterns.
 3. Very large flanks (100+) allow the model to learn longer-range patterns that partially compensate for the noise.
 
-For the TOPMed pathogenicity benchmark, flank=0 gives the best result (AUC=0.848), suggesting that cross-species conservation at the exact variant position is the strongest signal for pathogenicity.
 
 ---
 
@@ -545,7 +538,6 @@ We compared GraphyloVar against the following tools:
 - **GPN-MSA**: A protein language model adapted for genomic conservation scoring using multiple sequence alignments.
 - **GPN-Star**: An extension of GPN-MSA with improved variant scoring.
 - **Evo2**: A large genomic foundation model trained on diverse genomes. We obtained scores using the Evo2 API.
-- **AlphaMissense**: A deep learning model for missense variant pathogenicity prediction. Only applicable to coding missense variants.
 - **ESM-1b**: A protein language model. Applied to coding regions only.
 - **Nucleotide Transformer (NT)**: A large language model trained on DNA sequences.
 - **HyenaDNA**: A long-range genomic model based on hyena operators.
@@ -554,7 +546,6 @@ We compared GraphyloVar against the following tools:
 
 1. GraphyloVar ranks first on the MAF benchmark across all genomic categories. Its advantage is largest in non-coding regions (3-prime UTR, cCREs, transposable elements) where protein-based tools cannot be applied.
 
-2. On the TOPMed pathogenicity benchmark, GPN-MSA (0.970) and CADD (0.966) rank highest. GraphyloVar achieves 0.848, which is respectable but below the top tools. This benchmark is biased toward coding variants where protein context provides strong signal.
 
 3. GraphyloVar predictions show low correlation with all other tools (Pearson r = 0.04 to 0.14). This means GraphyloVar captures different aspects of variant function and is complementary to existing tools. An ensemble combining GraphyloVar with CADD or GPN-MSA could improve overall accuracy.
 
@@ -579,7 +570,6 @@ num_classes: 2              # Number of output classes
 
 ### Key Parameters
 
-- **context_flank**: Controls how much neighboring sequence is included. Use 0 for the fastest training and best TOPMed pathogenicity results. Use 1 for the best MAF benchmark results.
 - **batch_size**: Set this based on your GPU memory. On a 24GB GPU, you can use batch sizes up to 596 without out-of-memory errors.
 - **focal_gamma**: Controls the focal loss focusing parameter. Higher values give more weight to hard examples. The default of 2.0 works well in our experiments.
 - **model_name**: Choose from cnn_gcn (recommended), lstm_gcn, or transformer_gcn.

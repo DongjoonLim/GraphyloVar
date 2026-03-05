@@ -313,7 +313,6 @@ def score_variants(
     ----------
     model         : trained model
     X_variants    : (N, 115, seq_len)  variant feature arrays
-    y_variants    : (N,) binary labels (0=common, 1=rare/pathogenic)
     mask_indices  : species indices to zero out (hg38, apes, ancestors)
     model_name    : label for plots
     batch_size    : prediction batch size
