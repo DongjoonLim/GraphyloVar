@@ -1,0 +1,150 @@
+{
+  "run_tag": "v3flank32",
+  "config_path": "/home/mcb/users/dlim63/GraphyloVar/topmed_models/full_streaming_runs/v3_ablation/multitask_hybrid_v3_train1-10_val11-12_flank32_v3flank32_config.json",
+  "checkpoint_path": "/home/mcb/users/dlim63/GraphyloVar/topmed_models/full_streaming_runs/v3_ablation/multitask_hybrid_v3_train1-10_val11-12_flank32_v3flank32",
+  "config": {
+    "compact_dir": "topmed_compact_full",
+    "model_dir": "topmed_models/full_streaming_runs/v3_ablation",
+    "gpu": "0",
+    "train_chromosomes": "1-10",
+    "val_chromosomes": "11-12",
+    "test_chromosomes": "13-22",
+    "context": 100,
+    "context_flank": 32,
+    "batch_size": 64,
+    "epochs": 9999,
+    "patience": 30,
+    "learning_rate": 0.0003,
+    "binary_loss_weight": 1.5,
+    "model_name": "multitask_hybrid_v3",
+    "seed": 42,
+    "run_tag": "v3flank32",
+    "distribution": "single",
+    "mixed_precision": true,
+    "shuffle_chunk_size": 10000,
+    "skip_test_eval": true,
+    "steps_per_epoch": 5000,
+    "validation_steps": 1000,
+    "alignment_cache_dir": "topmed_alignment_cache",
+    "tensorboard_dir": "topmed_models/full_streaming_runs/tensorboard",
+    "lr_reduce_factor": 0.5,
+    "lr_reduce_patience": 5,
+    "lr_min": 1e-06,
+    "resume": true,
+    "append_history": true,
+    "species_masking": "off"
+  },
+  "effective_compact_dir": "topmed_compact_full",
+  "effective_alignment_cache_dir": "topmed_alignment_cache",
+  "attention_definition": "Held-out average SE gate activation from the species-attention block on chr13-22 samples.",
+  "samples_per_chrom": 128,
+  "n_species": 58,
+  "distance_to_human_r2": 0.0,
+  "top_species": [
+    {
+      "ucsc_name": "hg38",
+      "common_name": "Human",
+      "clade": "Primates",
+      "branch_length_to_human": 0.0,
+      "mean_se_attention_gate": 0.49604493379592896
+    },
+    {
+      "ucsc_name": "panTro4",
+      "common_name": "Chimp",
+      "clade": "Primates",
+      "branch_length_to_human": 0.01339,
+      "mean_se_attention_gate": 0.49604493379592896
+    },
+    {
+      "ucsc_name": "gorGor3",
+      "common_name": "Gorilla",
+      "clade": "Primates",
+      "branch_length_to_human": 0.019734,
+      "mean_se_attention_gate": 0.49604493379592896
+    },
+    {
+      "ucsc_name": "ponAbe2",
+      "common_name": "Orangutan",
+      "clade": "Primates",
+      "branch_length_to_human": 0.039403,
+      "mean_se_attention_gate": 0.49604493379592896
+    },
+    {
+      "ucsc_name": "nomLeu3",
+      "common_name": "Gibbon",
+      "clade": "Primates",
+      "branch_length_to_human": 0.046204,
+      "mean_se_attention_gate": 0.49604493379592896
+    },
+    {
+      "ucsc_name": "rheMac3",
+      "common_name": "Rhesus macaque",
+      "clade": "Primates",
+      "branch_length_to_human": 0.079575,
+      "mean_se_attention_gate": 0.49604493379592896
+    },
+    {
+      "ucsc_name": "macFas5",
+      "common_name": "Crab-eating macaque",
+      "clade": "Primates",
+      "branch_length_to_human": 0.079575,
+      "mean_se_attention_gate": 0.49604493379592896
+    },
+    {
+      "ucsc_name": "papAnu2",
+      "common_name": "Baboon",
+      "clade": "Primates",
+      "branch_length_to_human": 0.079626,
+      "mean_se_attention_gate": 0.49604493379592896
+    },
+    {
+      "ucsc_name": "chlSab2",
+      "common_name": "Green monkey",
+      "clade": "Primates",
+      "branch_length_to_human": 0.087974,
+      "mean_se_attention_gate": 0.49604493379592896
+    },
+    {
+      "ucsc_name": "calJac3",
+      "common_name": "Marmoset",
+      "clade": "Primates",
+      "branch_length_to_human": 0.107454,
+      "mean_se_attention_gate": 0.49604493379592896
+    },
+    {
+      "ucsc_name": "saiBol1",
+      "common_name": "Squirrel monkey",
+      "clade": "Primates",
+      "branch_length_to_human": 0.087804,
+      "mean_se_attention_gate": 0.49604493379592896
+    },
+    {
+      "ucsc_name": "otoGar3",
+      "common_name": "Bushbaby",
+      "clade": "Primates",
+      "branch_length_to_human": 0.270334,
+      "mean_se_attention_gate": 0.49604493379592896
+    },
+    {
+      "ucsc_name": "tupChi1",
+      "common_name": "Tree shrew",
+      "clade": "Primates",
+      "branch_length_to_human": 0.318845,
+      "mean_se_attention_gate": 0.49604493379592896
+    },
+    {
+      "ucsc_name": "speTri2",
+      "common_name": "Squirrel",
+      "clade": "Glires",
+      "branch_length_to_human": 0.335427,
+      "mean_se_attention_gate": 0.49604493379592896
+    },
+    {
+      "ucsc_name": "jacJac1",
+      "common_name": "Jerboa",
+      "clade": "Glires",
+      "branch_length_to_human": 0.409959,
+      "mean_se_attention_gate": 0.49604493379592896
+    }
+  ]
+}
