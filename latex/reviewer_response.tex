@@ -1,0 +1,260 @@
+\documentclass[11pt]{article}
+\usepackage[margin=2.5cm]{geometry}
+\usepackage{hyperref}
+\usepackage{xcolor}
+\usepackage{enumitem}
+\usepackage{booktabs}
+\usepackage{parskip}
+
+\definecolor{revcolor}{RGB}{0,100,180}
+\newcommand{\reviewercomment}[1]{\textit{``#1''}}
+\newcommand{\ourresponse}{\textbf{Response:}\ }
+\newcommand{\manuscriptchange}{\textbf{Manuscript change:}\ }
+
+\title{\textbf{Response to Reviewers}\\[0.5em]
+  \large GraphyloVar: Predicting the impact of non-coding variants\\
+  using a multi-species sequence model\\[0.5em]
+  \normalsize Bioinformatics, Manuscript BIOINF-2025-2871}
+\author{Dongjoon Lim and Mathieu Blanchette}
+\date{}
+
+\begin{document}
+\maketitle
+
+We thank the reviewers for their reading and feedback. We addressed the comments. New and revised text in the manuscript is indicated by blue highlighting in the revised PDF. Below we respond to each comment.
+
+\bigskip
+\hrule
+\section*{Reviewer 1}
+
+\subsection*{Comment R1.1: GCN Interpretability}
+
+\reviewercomment{Lacks detailed analysis of the GCN component. Need investigations into
+correlations among multi-species sequences and enhanced interpretability of GCN-learned
+representations.}
+
+\ourresponse We added a new Results section (Section 3.5, ``GCN Interpretability and Species
+Importance'') with an additive perturbation analysis: for each of the 58 extant
+placental mammal species, we replaced all other alignment rows with a gap token and measured the
+decrease in nucleotide cross-entropy compared to an all-gap baseline on 50,000 held-out variants
+(chromosomes~13 to~22). This quantifies the isolated information content of each species
+independently.
+
+Key findings: (1)~53 of 58 extant species contribute positive isolated signal. (2)~Human provides
+the largest contribution ($\Delta$CE~=~7.1). (3)~Four diverged primates (Orangutan, Green monkey,
+Gorilla, Gibbon; $\Delta$CE~=~0.62 to~1.50) form a secondary cluster. (4)~Chimpanzee ranks 11th
+($\Delta$CE~=~0.062) due to information redundancy with the Human row (leave-one-out marginal
+$\Delta$CE~$\approx -2.4 \times 10^{-6}$). (5)~The SE-attention gate values are consistent with
+the perturbation rankings, showing that the model's internal weighting reflects phylogenetic
+structure. (6)~Position-occlusion saliency confirms that predictions are anchored at the variant
+site, with sharper localization in the wider context model (Supplementary Figure~S3).
+
+New figures: Figure~6 (gcn\_species\_importance bar chart), Supplementary Figure~S1 (tree
+ablation), Supplementary Figure~S2 (model component ablation), Supplementary Figure~S3
+(position-occlusion saliency comparison).
+
+\manuscriptchange Methods Section~2.2 updated to describe center extraction (not mean pooling).
+Results Section~3.5 added. Discussion updated with interpretability summary.
+
+\bigskip
+
+\subsection*{Comment R1.2: Sequence Fragment Length (65 bp) Justification}
+
+\reviewercomment{Fixed 65 bp not justified. Need systematic experiments to demonstrate optimality
+or robustness of this choice.}
+
+\ourresponse We trained models with three context-window settings: flank $\in \{16, 32, 100\}$~bp
+(input sequences of 33, 65, and 201~bp). All models used the same training procedure on
+chromosomes~1 to~10 with chromosomes~11 to~12 as validation. The results (Table~2, Section~3.4)
+show that flank~=~32 (65~bp) has the highest overall held-out AUROC (0.625) among the three
+settings, compared to the narrower flank~=~16 (0.622) and the wider flank~=~100 (0.617).
+
+\manuscriptchange Section~3.4 ``Context Window Ablation'' added with Table~2 reporting
+region-resolved AUROC for all three window sizes.
+
+\bigskip
+
+\subsection*{Comment R1.3: Complementarity Evidence}
+
+\reviewercomment{Claim that GraphyloVar finds unique information not supported quantitatively.
+Need additional analyses to demonstrate complementarity and unique contributions.}
+
+\ourresponse We added quantitative evidence of complementarity in Section~3.4. We computed
+a z-normalized score ensemble of GraphyloVar and CADD on the full held-out test set (chromosomes~13
+to~22, $\sim$149M variants). The ensemble shows AUROC~=~0.6442, an increase of $+0.020$ over
+GraphyloVar alone ($p < 10^{-15}$, DeLong test on 500,000 held-out variants). Bootstrap 95\%
+confidence intervals ($B$~=~1,000) do not overlap between GraphyloVar alone and the ensemble.
+Figure~5 plots the per-model and ensemble AUROC with confidence intervals.
+
+\manuscriptchange Section~3.4 ``Complementarity'' expanded with DeLong test statistics, bootstrap
+confidence intervals, and Figure~5 (fig\_ensemble\_auroc).
+
+\bigskip
+
+\subsection*{Comment R1.4: Evo2 and GPN-Star Comparison}
+
+\reviewercomment{Must include quantitative comparison with Evo2 and GPN-Star.}
+
+\ourresponse GPN-Star has been added as a baseline throughout all quantitative results. Evo2 was
+tested but requires GPU compute capability 8.9 or higher (Ada or Hopper class); our hardware is
+NVIDIA Quadro RTX 6000 (compute capability 7.5), which is below this requirement. We state this
+explicitly in Methods Section~2.4 and note Evo2 as an important future comparison point. GPN-Star
+results are included in Figures~2A, 3, and Table~1.
+
+\manuscriptchange Methods Section~2.4 updated with GPN-Star and Evo2 paragraphs. Evo2 exclusion
+justified by hardware constraint.
+
+\bigskip
+
+\subsection*{Comment R1.5: Code and Data Release}
+
+\reviewercomment{Repository missing complete implementation and datasets. Must release full source
+code and datasets with usage procedures and licenses.}
+
+\ourresponse A new section ``Data and Code Availability'' has been added at the end of the
+manuscript. It provides: (1)~the GitHub URL for source code, trained model weights (flank~=~32
+checkpoint), and preprocessing scripts; (2)~the dbGaP accession (phs000964) for the TOPMed
+whole-genome sequencing data; (3)~the UCSC URL for the 100-way vertebrate alignments; and
+(4)~pointers to the original publications for each MPRA dataset.
+
+\manuscriptchange ``Data and Code Availability'' section added (after Discussion).
+
+\bigskip
+
+\subsection*{Comment R1.6: Dataset Inconsistencies}
+
+\reviewercomment{Saturation mutagenesis (Kircher et al. 2019) mentioned but not shown. GWAScatalog
+for 3'UTRs in Figures 3 and 5 but not described. Fix consistency.}
+
+\ourresponse Kircher et al. (2019) is now included in Methods Section~2.5 as one of
+the three datasets forming the genome-wide MPRA group (along with Abell et al. 2022 and McAfee
+et al. 2023), and its use is described in the text. The 3'UTR group is now described explicitly:
+Griesemer et al. (2021) used GWAScatalog annotations to identify disease-associated loci, and
+Schuster et al. (2023) characterized prostate cancer 3'UTR variants; both are described in
+Section~2.5.
+
+\manuscriptchange Methods Section~2.5 rewritten to fully describe all 13 MPRA datasets grouped
+by the three categories shown in Figure~3.
+
+\bigskip
+
+\subsection*{Comment R1.7: MAF Correlation Figures}
+
+\reviewercomment{Results reported only as text. Add supplementary figures or tables.}
+
+\ourresponse The Spearman correlation values are now reported in Table~1 (Section~3.2), a formal
+table rather than in-line text. The table includes GraphyloVar ($\rho$~=~0.164) and all five
+baselines.
+
+\manuscriptchange Section~3.2 now includes Table~1 (Spearman correlations) as a formal table.
+
+\bigskip
+
+\subsection*{Comment R1.8: Figure 1 Architecture Issues}
+
+\reviewercomment{Mean Pooling to Attention inconsistency with GCN inputs. Unexplained white text
+near Concatenate Left + Right. Clarify or fix.}
+
+\ourresponse The Figure~1 caption has been corrected to accurately describe the architecture: the
+model applies center extraction (not mean pooling) after the transformer blocks to obtain a
+64-dimensional representation per species; the SE-gate then produces per-species attention weights
+before the GCN. The caption now explains each component in the order it appears in the figure.
+
+\manuscriptchange Figure~1 caption updated in full (Methods, Figure caption after line 142).
+
+\bigskip
+
+\subsection*{Comment R1.9: Figure 2 Caption Error}
+
+\reviewercomment{``GraphyloVar Score (dark purple) and GraphyloVar Score (purple)'' is redundant.
+Fix caption, legend colors, labels.}
+
+\ourresponse Fixed. The caption now reads ``GraphyloVar Allele Ratio Score (dark purple) and
+GraphyloVar Combined Score (purple)'', which correctly distinguishes the two model outputs.
+
+\manuscriptchange Figure~2 caption corrected (line 275).
+
+\bigskip
+
+\subsection*{Comment R1.10: Naming: GPN-MSA vs GPNMSA}
+
+\reviewercomment{``GPN-MSA'' vs ``GPNMSA'': standardize throughout.}
+
+\ourresponse We changed it to ``GPN-MSA'' throughout. We verified this with \texttt{grep} and
+there are no remaining ``GPNMSA'' instances.
+
+\manuscriptchange Global find-replace applied. Zero instances of ``GPNMSA'' remain.
+
+\bigskip
+\hrule
+\section*{Reviewer 2}
+
+\subsection*{Comment R2.1: Held-out Data Definition / Leakage}
+
+\reviewercomment{Unclear if hold-out is variant-level or region-level. State explicitly.
+Region-based holdout evaluation recommended.}
+
+\ourresponse The holdout strategy is now explicitly stated in Section~3.1: chromosomes~1 to~10
+were used for training, chromosomes~11 to~12 for validation, and chromosomes~13 to~22 for the
+held-out test set exclusively. This chromosome-level partition avoids positional leakage.
+The test set contains approximately 149~million SNVs from the TOPMed whole-genome sequencing
+cohort.
+
+\manuscriptchange Section~3.1 first paragraph updated with explicit chromosome-level holdout
+description.
+
+\bigskip
+
+\subsection*{Comment R2.2: Prior Work: PHACT and PHACTboost}
+
+\reviewercomment{Discuss PHACT (Kuru et al. 2022) and PHACTboost (Kuru et al. 2024) for
+phylogeny-aware variant prediction context.}
+
+\ourresponse A discussion paragraph comparing GraphyloVar to PHACT and PHACTboost has been added
+to the Discussion section. The key point is that PHACT and PHACTboost require protein-level
+features (amino acid conservation, protein structure, functional domain annotations) and are
+therefore restricted to missense variants in coding regions. GraphyloVar targets non-coding
+variants using only multi-species whole-genome alignments. The two approaches are complementary
+rather than competing, and combining them in an ensemble for coding variants is an interesting
+direction for future work.
+
+\manuscriptchange Discussion paragraph added via included file (phact\_paragraph.tex).
+
+\bigskip
+
+\subsection*{Comment R2.3: dbNSFP Comparison Breadth}
+
+\reviewercomment{36 algorithms available in dbNSFP: compare to more, or justify exclusions.}
+
+\ourresponse We have added a justification paragraph to Methods Section~2.4 explaining the
+baseline selection strategy. We selected baselines to represent methodologically distinct
+families: conservation metrics (PhyloP, PhastCons), integrative ML frameworks (CADD), sequence
+deep learning (Enformer), and MSA-aware models (GPN-MSA, GPN-Star). Running all 36 dbNSFP
+tools was outside our scope; these families collectively cover the major approaches to variant
+effect prediction and avoid redundancy.
+
+\manuscriptchange Methods Section~2.4 updated with method-selection justification paragraph.
+
+\bigskip
+
+\subsection*{Comment R2.4: Loss Function Clarification}
+
+\reviewercomment{Allele-frequency head outputs categorical distribution but BCE reported as loss.
+Clarify.}
+
+\ourresponse Corrected. Methods Section~2.3 now reads: ``For the allele frequency head, we use
+categorical cross-entropy loss, which is appropriate for predicting a probability distribution
+over the five allele states (A, C, G, T, gap). For the SNP probability head, we use binary
+cross-entropy loss, since polymorphism status is a binary label.'' The original text incorrectly
+stated binary cross-entropy for both heads.
+
+\manuscriptchange Methods Section~2.3, training paragraph, corrected.
+
+\bigskip
+\hrule
+\bigskip
+
+We think these revisions address the reviewer comments. We thank the reviewers again for
+their feedback.
+
+\end{document}

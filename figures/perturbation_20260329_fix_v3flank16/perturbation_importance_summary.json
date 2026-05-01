@@ -1,0 +1,115 @@
+{
+  "run_tag": "v3flank16",
+  "model_name": "multitask_hybrid_v3",
+  "checkpoint_path": "/home/mcb/users/dlim63/GraphyloVar/topmed_models/full_streaming_runs/v3_ablation/multitask_hybrid_v3_train1-10_val11-12_flank16_v3flank16.keras",
+  "config_path": "/home/mcb/users/dlim63/GraphyloVar/topmed_models/full_streaming_runs/v3_ablation/multitask_hybrid_v3_train1-10_val11-12_flank16_v3flank16_config.json",
+  "species_masking": "off",
+  "context": 100,
+  "context_flank": 16,
+  "sample_chromosome": 12,
+  "sample_size_requested": 1024,
+  "perturbation_method": "species row ablation to GAP/N token (4); score = positive delta nucleotide cross-entropy",
+  "importance_min": -5.829613655805588e-05,
+  "importance_max": 0.3868049383163452,
+  "phylogeny_distance_r2": 0.08997811865002661,
+  "explicit_species_scores": {
+    "hg38": 0.3868049383163452,
+    "panTro4": -3.054458647966385e-05,
+    "gorGor3": 0.0004355385899543762,
+    "ponAbe2": 0.0004113605245947838,
+    "nomLeu3": 0.00016415677964687347,
+    "rheMac3": -1.3796612620353699e-05
+  },
+  "top_species": [
+    {
+      "ucsc_name": "hg38",
+      "common_name": "Human",
+      "importance": 0.3868049383163452,
+      "branch_length_to_human": 0.0
+    },
+    {
+      "ucsc_name": "chlSab2",
+      "common_name": "Green monkey",
+      "importance": 0.0005484092980623245,
+      "branch_length_to_human": 0.087974
+    },
+    {
+      "ucsc_name": "gorGor3",
+      "common_name": "Gorilla",
+      "importance": 0.0004355385899543762,
+      "branch_length_to_human": 0.019734
+    },
+    {
+      "ucsc_name": "ponAbe2",
+      "common_name": "Orangutan",
+      "importance": 0.0004113605245947838,
+      "branch_length_to_human": 0.039403
+    },
+    {
+      "ucsc_name": "nomLeu3",
+      "common_name": "Gibbon",
+      "importance": 0.00016415677964687347,
+      "branch_length_to_human": 0.046204
+    },
+    {
+      "ucsc_name": "criGri1",
+      "common_name": "Chinese hamster",
+      "importance": 5.974620580673218e-05,
+      "branch_length_to_human": 0.510109
+    },
+    {
+      "ucsc_name": "pteAle1",
+      "common_name": "Black flying fox",
+      "importance": 2.9612332582473755e-05,
+      "branch_length_to_human": 0.337613
+    },
+    {
+      "ucsc_name": "rn6",
+      "common_name": "Rat",
+      "importance": 2.2129155695438385e-05,
+      "branch_length_to_human": 0.509471
+    },
+    {
+      "ucsc_name": "tupChi1",
+      "common_name": "Tree shrew",
+      "importance": 1.5803612768650055e-05,
+      "branch_length_to_human": 0.318845
+    },
+    {
+      "ucsc_name": "cavPor3",
+      "common_name": "Guinea pig",
+      "importance": 1.225993037223816e-05,
+      "branch_length_to_human": 0.362746
+    },
+    {
+      "ucsc_name": "ochPri3",
+      "common_name": "Pika",
+      "importance": 1.0637566447257996e-05,
+      "branch_length_to_human": 0.463753
+    },
+    {
+      "ucsc_name": "eleEdw1",
+      "common_name": "Cape elephant shrew",
+      "importance": 5.2032992243766785e-06,
+      "branch_length_to_human": 0.393569
+    },
+    {
+      "ucsc_name": "oviAri3",
+      "common_name": "Sheep",
+      "importance": 4.388391971588135e-06,
+      "branch_length_to_human": 0.388479
+    },
+    {
+      "ucsc_name": "musFur1",
+      "common_name": "Ferret",
+      "importance": 3.9460137486457825e-06,
+      "branch_length_to_human": 0.359971
+    },
+    {
+      "ucsc_name": "bosTau8",
+      "common_name": "Cow",
+      "importance": 3.7085264921188354e-06,
+      "branch_length_to_human": 0.388479
+    }
+  ]
+}

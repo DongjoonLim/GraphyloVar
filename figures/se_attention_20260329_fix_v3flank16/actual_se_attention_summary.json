@@ -1,0 +1,150 @@
+{
+  "run_tag": "v3flank16",
+  "config_path": "/home/mcb/users/dlim63/GraphyloVar/topmed_models/full_streaming_runs/v3_ablation/multitask_hybrid_v3_train1-10_val11-12_flank16_v3flank16_config.json",
+  "checkpoint_path": "/home/mcb/users/dlim63/GraphyloVar/topmed_models/full_streaming_runs/v3_ablation/multitask_hybrid_v3_train1-10_val11-12_flank16_v3flank16",
+  "config": {
+    "compact_dir": "/tmp/graphylovar_v3_recovery/data/topmed_compact_full",
+    "model_dir": "/home/mcb/users/dlim63/GraphyloVar/topmed_models/full_streaming_runs/v3_ablation",
+    "gpu": "0",
+    "train_chromosomes": "1-10",
+    "val_chromosomes": "11-12",
+    "test_chromosomes": "13-22",
+    "context": 100,
+    "context_flank": 16,
+    "batch_size": 128,
+    "epochs": 9999,
+    "patience": 30,
+    "learning_rate": 0.0003,
+    "binary_loss_weight": 1.5,
+    "model_name": "multitask_hybrid_v3",
+    "seed": 42,
+    "run_tag": "v3flank16",
+    "distribution": "single",
+    "mixed_precision": true,
+    "shuffle_chunk_size": 10000,
+    "skip_test_eval": true,
+    "steps_per_epoch": 5000,
+    "validation_steps": 1000,
+    "alignment_cache_dir": "/tmp/graphylovar_v3_recovery/data/topmed_alignment_cache",
+    "tensorboard_dir": "/tmp/graphylovar_v3_recovery/live/tensorboard",
+    "lr_reduce_factor": 0.5,
+    "lr_reduce_patience": 5,
+    "lr_min": 1e-06,
+    "resume": true,
+    "append_history": true,
+    "species_masking": "off"
+  },
+  "effective_compact_dir": "/home/mcb/users/dlim63/GraphyloVar/topmed_compact_full",
+  "effective_alignment_cache_dir": "/home/mcb/users/dlim63/GraphyloVar/topmed_alignment_cache",
+  "attention_definition": "Held-out average SE gate activation from the species-attention block on chr13-22 samples.",
+  "samples_per_chrom": 128,
+  "n_species": 58,
+  "distance_to_human_r2": 0.12642694316809674,
+  "top_species": [
+    {
+      "ucsc_name": "hg38",
+      "common_name": "Human",
+      "clade": "Primates",
+      "branch_length_to_human": 0.0,
+      "mean_se_attention_gate": 1.0
+    },
+    {
+      "ucsc_name": "ponAbe2",
+      "common_name": "Orangutan",
+      "clade": "Primates",
+      "branch_length_to_human": 0.039403,
+      "mean_se_attention_gate": 0.5410285592079163
+    },
+    {
+      "ucsc_name": "chlSab2",
+      "common_name": "Green monkey",
+      "clade": "Primates",
+      "branch_length_to_human": 0.087974,
+      "mean_se_attention_gate": 0.40135902166366577
+    },
+    {
+      "ucsc_name": "nomLeu3",
+      "common_name": "Gibbon",
+      "clade": "Primates",
+      "branch_length_to_human": 0.046204,
+      "mean_se_attention_gate": 0.3422642946243286
+    },
+    {
+      "ucsc_name": "gorGor3",
+      "common_name": "Gorilla",
+      "clade": "Primates",
+      "branch_length_to_human": 0.019734,
+      "mean_se_attention_gate": 0.28676483035087585
+    },
+    {
+      "ucsc_name": "eleEdw1",
+      "common_name": "Cape elephant shrew",
+      "clade": "Afrotheria & Xenarthra",
+      "branch_length_to_human": 0.393569,
+      "mean_se_attention_gate": 0.2599829137325287
+    },
+    {
+      "ucsc_name": "myoLuc2",
+      "common_name": "Little brown bat",
+      "clade": "Chiroptera",
+      "branch_length_to_human": 0.390153,
+      "mean_se_attention_gate": 0.18200251460075378
+    },
+    {
+      "ucsc_name": "micOch1",
+      "common_name": "Prairie vole",
+      "clade": "Glires",
+      "branch_length_to_human": 0.510109,
+      "mean_se_attention_gate": 0.1769503355026245
+    },
+    {
+      "ucsc_name": "sorAra2",
+      "common_name": "Shrew",
+      "clade": "Eulipotyphla",
+      "branch_length_to_human": 0.513683,
+      "mean_se_attention_gate": 0.17525798082351685
+    },
+    {
+      "ucsc_name": "rn6",
+      "common_name": "Rat",
+      "clade": "Glires",
+      "branch_length_to_human": 0.509471,
+      "mean_se_attention_gate": 0.17350894212722778
+    },
+    {
+      "ucsc_name": "jacJac1",
+      "common_name": "Jerboa",
+      "clade": "Glires",
+      "branch_length_to_human": 0.409959,
+      "mean_se_attention_gate": 0.1716635674238205
+    },
+    {
+      "ucsc_name": "eriEur2",
+      "common_name": "Hedgehog",
+      "clade": "Eulipotyphla",
+      "branch_length_to_human": 0.465906,
+      "mean_se_attention_gate": 0.1597585529088974
+    },
+    {
+      "ucsc_name": "ochPri3",
+      "common_name": "Pika",
+      "clade": "Glires",
+      "branch_length_to_human": 0.463753,
+      "mean_se_attention_gate": 0.15169508755207062
+    },
+    {
+      "ucsc_name": "myoDav1",
+      "common_name": "David's myotis",
+      "clade": "Chiroptera",
+      "branch_length_to_human": 0.387613,
+      "mean_se_attention_gate": 0.13610228896141052
+    },
+    {
+      "ucsc_name": "oryAfe1",
+      "common_name": "Aardvark",
+      "clade": "Afrotheria & Xenarthra",
+      "branch_length_to_human": 0.246882,
+      "mean_se_attention_gate": 0.11328888684511185
+    }
+  ]
+}

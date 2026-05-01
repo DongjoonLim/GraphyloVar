@@ -1,0 +1,59 @@
+ucsc_name,common_name,clade,branch_length_to_human,mean_se_attention_gate
+hg38,Human,Primates,0.000000,1.000000000
+panTro4,Chimp,Primates,0.013390,0.011725303
+gorGor3,Gorilla,Primates,0.019734,0.286764830
+ponAbe2,Orangutan,Primates,0.039403,0.541028559
+nomLeu3,Gibbon,Primates,0.046204,0.342264295
+rheMac3,Rhesus macaque,Primates,0.079575,0.005585026
+macFas5,Crab-eating macaque,Primates,0.079575,0.002735547
+papAnu2,Baboon,Primates,0.079626,0.000097835
+chlSab2,Green monkey,Primates,0.087974,0.401359022
+calJac3,Marmoset,Primates,0.107454,0.000000770
+saiBol1,Squirrel monkey,Primates,0.087804,0.001773675
+otoGar3,Bushbaby,Primates,0.270334,0.000005879
+tupChi1,Tree shrew,Primates,0.318845,0.002143510
+speTri2,Squirrel,Glires,0.335427,0.002008779
+jacJac1,Jerboa,Glires,0.409959,0.171663567
+micOch1,Prairie vole,Glires,0.510109,0.176950336
+criGri1,Chinese hamster,Glires,0.510109,0.022130003
+mesAur1,Golden hamster,Glires,0.510109,0.088293977
+mm10,Mouse,Glires,0.502391,0.092683911
+rn6,Rat,Glires,0.509471,0.173508942
+hetGla2,Naked mole-rat,Glires,0.347117,0.038604952
+cavPor3,Guinea pig,Glires,0.362746,0.105696119
+chiLan1,Chinchilla,Glires,0.417117,0.037792124
+octDeg1,Degu,Glires,0.457117,0.031082630
+oryCun2,Rabbit,Glires,0.376911,0.023143157
+ochPri3,Pika,Glires,0.463753,0.151695088
+susScr3,Pig,Cetartiodactyla,0.339399,0.001992246
+vicPac2,Alpaca,Cetartiodactyla,0.327009,0.010391301
+camFer1,Bactrian camel,Cetartiodactyla,0.319734,0.002304050
+turTru2,Dolphin,Cetartiodactyla,0.329575,0.000799150
+orcOrc1,Killer whale,Cetartiodactyla,0.334575,0.000588946
+panHod1,Tibetan antelope,Cetartiodactyla,0.378479,0.000185129
+bosTau8,Cow,Cetartiodactyla,0.388479,0.000880173
+oviAri3,Sheep,Cetartiodactyla,0.388479,0.001420990
+capHir1,Goat,Cetartiodactyla,0.388479,0.002062913
+equCab2,Horse,Carnivora & Perissodactyla,0.319523,0.000432582
+cerSim1,White rhinoceros,Carnivora & Perissodactyla,0.285126,0.000439001
+felCat8,Cat,Carnivora & Perissodactyla,0.358583,0.000692160
+canFam3,Dog,Carnivora & Perissodactyla,0.332429,0.000117609
+musFur1,Ferret,Carnivora & Perissodactyla,0.359971,0.004780199
+ailMel1,Panda,Carnivora & Perissodactyla,0.359971,0.000091682
+odoRosDiv1,Walrus,Carnivora & Perissodactyla,0.379971,0.008655354
+lepWed1,Weddell seal,Carnivora & Perissodactyla,0.379971,0.000159344
+pteAle1,Black flying fox,Chiroptera,0.337613,0.000702231
+pteVam1,Large flying fox,Chiroptera,0.351012,0.021806307
+eptFus1,Big brown bat,Chiroptera,0.317613,0.112433359
+myoDav1,David's myotis,Chiroptera,0.387613,0.136102289
+myoLuc2,Little brown bat,Chiroptera,0.390153,0.182002515
+eriEur2,Hedgehog,Eulipotyphla,0.465906,0.159758553
+sorAra2,Shrew,Eulipotyphla,0.513683,0.175257981
+conCri1,Star-nosed mole,Eulipotyphla,0.444121,0.113176107
+loxAfr3,Elephant,Afrotheria & Xenarthra,0.345811,0.001284697
+eleEdw1,Cape elephant shrew,Afrotheria & Xenarthra,0.393569,0.259982914
+triMan1,Manatee,Afrotheria & Xenarthra,0.396579,0.000263701
+chrAsi1,Cape golden mole,Afrotheria & Xenarthra,0.286882,0.047541201
+echTel2,Tenrec,Afrotheria & Xenarthra,0.492818,0.083791122
+oryAfe1,Aardvark,Afrotheria & Xenarthra,0.246882,0.113288887
+dasNov3,Armadillo,Afrotheria & Xenarthra,0.366691,0.041310307
