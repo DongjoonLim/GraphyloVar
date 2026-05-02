@@ -1,0 +1,556 @@
+%%
+%% Copyright 2022 OXFORD UNIVERSITY PRESS
+%%
+%% This file is part of the 'oup-authoring-template Bundle'.
+%% ---------------------------------------------
+%%
+%% It may be distributed under the conditions of the LaTeX Project Public
+%% License, either version 1.2 of this license or (at your option) any
+%% later version.  The latest version of this license is in
+%%    http://www.latex-project.org/lppl.txt
+%% and version 1.2 or later is part of all distributions of LaTeX
+%% version 1999/12/01 or later.
+%%
+%% The list of all files belonging to the 'oup-authoring-template Bundle' is
+%% given in the file `manifest.txt'.
+%%
+%% Template article for OXFORD UNIVERSITY PRESS's document class `oup-authoring-template'
+%% with bibliographic references
+%%
+
+%%%CONTEMPORARY%%%
+\documentclass[unnumsec,webpdf,contemporary,large]{oup-authoring-template}%
+%\documentclass[unnumsec,webpdf,contemporary,large,namedate]{oup-authoring-template}% uncomment this line for author year citations and comment the above
+%\documentclass[unnumsec,webpdf,contemporary,medium]{oup-authoring-template}
+%\documentclass[unnumsec,webpdf,contemporary,small]{oup-authoring-template}
+
+%%%MODERN%%%
+%\documentclass[unnumsec,webpdf,modern,large]{oup-authoring-template}
+%\documentclass[unnumsec,webpdf,modern,large,namedate]{oup-authoring-template}% uncomment this line for author year citations and comment the above
+%\documentclass[unnumsec,webpdf,modern,medium]{oup-authoring-template}
+%\documentclass[unnumsec,webpdf,modern,small]{oup-authoring-template}
+
+%%%TRADITIONAL%%%
+%\documentclass[unnumsec,webpdf,traditional,large]{oup-authoring-template}
+%\documentclass[unnumsec,webpdf,traditional,large,namedate]{oup-authoring-template}% uncomment this line for author year citations and comment the above
+%\documentclass[unnumsec,namedate,webpdf,traditional,medium]{oup-authoring-template}
+%\documentclass[namedate,webpdf,traditional,small]{oup-authoring-template}
+
+%\onecolumn % for one column layouts
+
+%\usepackage{showframe}
+\usepackage{xcolor}
+\newcommand{\rev}[1]{{\color{red}#1}}
+
+\graphicspath{{Fig/}}
+
+% line numbers
+%\usepackage[mathlines, switch]{lineno}
+%\usepackage[right]{lineno}
+
+\theoremstyle{thmstyleone}%
+\newtheorem{theorem}{Theorem}%  meant for continuous numbers
+%%\newtheorem{theorem}{Theorem}[section]% meant for sectionwise numbers
+%% optional argument [theorem] produces theorem numbering sequence instead of independent numbers for Proposition
+\newtheorem{proposition}[theorem]{Proposition}%
+%%\newtheorem{proposition}{Proposition}% to get separate numbers for theorem and proposition etc.
+\theoremstyle{thmstyletwo}%
+\newtheorem{example}{Example}%
+\newtheorem{remark}{Remark}%
+\theoremstyle{thmstylethree}%
+\newtheorem{definition}{Definition}
+
+\begin{document}
+
+\journaltitle{Journal Title Here}
+\DOI{DOI HERE}
+\copyrightyear{2022}
+\pubyear{2019}
+\access{Advance Access Publication Date: Day Month Year}
+\appnotes{Paper}
+
+\firstpage{1}
+
+%\subtitle{Subject Section}
+
+\title[GraphyloVar: multi-species variant effect prediction]{GraphyloVar: Predicting the impact of non-coding variants using a multi-species sequence model}
+
+\author[1]{Dongjoon Lim}
+\author[1,$\ast$]{Mathieu Blanchette}
+% \author[3]{Third Author}
+% \author[3]{Fourth Author}
+% \author[4]{Fifth Author\ORCID{0000-0000-0000-0000}}
+
+\authormark{Lim and Blanchette}
+
+\address[1]{\orgdiv{School of Computer Science}, \orgname{McGill University}, \orgaddress{\street{3480 Rue University, Montreal}, \postcode{H3A 2A7}, \state{QC}, \country{CANADA}}}
+% \address[2]{\orgdiv{Department}, \orgname{Organization}, \orgaddress{\street{Street}, \postcode{Postcode}, \state{State}, \country{Country}}}
+% \address[3]{\orgdiv{Department}, \orgname{Organization}, \orgaddress{\street{Street}, \postcode{Postcode}, \state{State}, \country{Country}}}
+% \address[4]{\orgdiv{Department}, \orgname{Organization}, \orgaddress{\street{Street}, \postcode{Postcode}, \state{State}, \country{Country}}}
+
+\corresp[$\ast$]{Corresponding author. \href{email:blanchem@cs.mcgill.ca}{blanchem@cs.mcgill.ca}}
+
+\received{Date}{0}{Year}
+\revised{Date}{0}{Year}
+\accepted{Date}{0}{Year}
+
+%\editor{Associate Editor: Name}
+
+%\abstract{
+%\textbf{Motivation:} .\\
+%\textbf{Results:} .\\
+%\textbf{Availability:} .\\
+%\textbf{Contact:} \href{name@email.com}{name@email.com}\\
+%\textbf{Supplementary information:} Supplementary data are available at \textit{Journal Name}
+%online.}
+
+\abstract{\textbf{Motivation:} Understanding the functional impact of genetic variants is a key problem for precision medicine. Tools like CADD, PhyloP, and PhastCons are useful, but they often look at each position in the genome in isolation. This means they can miss important information from the evolutionary history that connects different species. In this paper, we extend our previous model, Graphylo, to predict the effects of variants. Our new model, GraphyloVar, is built to directly utilize the phylogenetic tree that relates the species.\\
+\textbf{Results:} GraphyloVar is a deep learning model that considers both DNA sequence and evolutionary patterns from many species. It uses two main components: Graph Convolutional Networks (GCNs) to process the phylogenetic tree, and Transformer encoders to extract features from the DNA sequences. Pre-trained to predict population-level allele frequencies on the TOPMed whole-genome sequencing cohort, GraphyloVar achieves an AUROC of 0.6246 zero-shot on $\sim$149M held-out variants, and an ensemble with CADD reaches 0.6442 ($+$0.020, $p < 10^{-15}$). Fine-tuned GraphyloVar achieves the highest AUROC across all 13 MPRA benchmark datasets. By integrating deep learning with explicit phylogenetic input, GraphyloVar offers a powerful and complementary approach to variant effect prediction that utilizes the full evolutionary history from many species to better identify and prioritize important non-coding variants.\\
+\textbf{Availability and implementation:} Code and datasets are available at \url{https://github.com/DongjoonLim/GraphyloVar}\\
+\textbf{Contact:} \href{blanchem@cs.mcgill.ca}{blanchem@cs.mcgill.ca}}
+\keywords{Phylogeny-aware Machine Learning, DNA Foundation Model, Variant effect prediction}
+
+% \boxedtext{
+% \begin{itemize}
+% \item Key boxed text here.
+% \item Key boxed text here.
+% \item Key boxed text here.
+% \end{itemize}}
+
+\maketitle
+
+
+\section{Introduction}
+Understanding the functional consequences of genetic variants is central to precision medicine and the decoding of complex genotype-phenotype relationships. Subtle alterations in the genome can have significant effects on phenotypic outcomes. Large-scale efforts, such as the 1000 Genomes Project and the ENCODE Project \citep{siva20081000, encode2012integrated} have shown that the human genome is highly complex, with various regulatory components and many genetic variants whose functions are still not well understood.
+Although genome-wide association studies (GWAS) have identified numerous genetic variants associated with disease phenotypes, they often do not explain the precise molecular mechanisms through which specific variants exert their effects \citep{uffelmann2021gwas}. Approximately 90\% of disease-associated genetic variants are located in non-coding regions, with a likely impact on transcriptional or post-transcriptional regulation. However, the mechanisms through which these non-coding variants influence gene expression, regulatory networks, and downstream cellular processes remain poorly understood.
+
+To address this problem, researchers have turned to computational methods. One common strategy is to use measures of evolutionary conservation. Tools such as PhyloP and PhastCons were developed to quantify the degree of evolutionary conservation at individual genomic positions \citep{siepel2005evolutionarily, pollard2010detection}, based on the premise that variants at highly conserved positions are more likely to be functionally deleterious. Following this logic, integrative tools, such as CADD, were created to predict the functional impact of variants by combining these conservation scores with many other types of data, such as functional annotations \citep{kircher2014general}.
+
+More recently, a different class of deep learning models, such as DeepSEA and Enformer, have been developed \citep{zhou2015predicting,avsec2021effective}. They use long stretches of DNA sequence (typically human) to predict features like chromatin accessibility, histone marks, and gene expression. These models have proven useful for capturing regulatory signals from the sequence. However, both approaches have limitations. The conservation-based methods use evolutionary context but often ignore local sequence patterns. On the other hand, the single-species deep learning models are powerful at using local sequence context but do not explicitly incorporate the broader evolutionary information that comes from comparing multiple species. This limitation is especially pronounced for non-coding regions, where detecting subtle evolutionary constraints requires both local sequence context and multi-species evolutionary signals.
+
+Building on the above contrast between single-species sequence models and approaches that use evolutionary information, other researchers have proposed foundation models for DNA, such as DNABERT \citep{ji2021dnabert}. These models are usually trained on sequences from a single species (most often human) and therefore do not leverage cross-species signals. Some recent methods, such as \rev{GPN-MSA \citep{benegas2024gpnmsa}, do include multiple sequence alignments (MSAs). However, GPN-MSA treats each alignment column as a single input token, flattening the evolutionary data and discarding the hierarchical phylogenetic structure that relates the species within each column.}
+
+In contrast to the approaches discussed above, our method, GraphyloVar, explicitly learns cross-species dependencies with a graph-based architecture. By incorporating multiple sequence alignments together with their phylogenetic structure from the start of pre-training, it can learn evolutionary constraints across species while preserving the hierarchical relationships between organisms. This design not only improves predictive accuracy, but also maintains biological relevance by preserving the evolutionary context that many other methods overlook. Building on our previous work with Evolstm \citep{lim2020evolstm}, where we showed that sequence context strongly influences mutation probabilities, and Graphylo \citep{lim2024graphylo}, where we showed that incorporating evolutionary information improves the prediction of regulatory sites, we extend these ideas to capture both local sequence context and cross-species evolutionary patterns through explicit phylogenetic modeling.
+
+\rev{A key distinguishing feature of GraphyloVar versus GPN-MSA is the explicit modeling of phylogenetic topology. Whereas GPN-MSA flattens the alignment columns into single tokens, GraphyloVar passes per-species features through a Graph Convolutional Network (GCN) whose adjacency matrix encodes the mammalian phylogenetic tree, preserving hierarchical evolutionary relationships.}
+
+A distinctive feature of the GraphyloVar framework is its pre-training objective: rather than predicting masked nucleotides, the model predicts population-level allele frequencies. This biologically informed objective yields a foundation model that captures the evolutionary constraints shaping genomic variation, applicable as a zero-shot predictor or fine-tuned for specific downstream tasks.
+
+\begin{figure*}[ht!]
+  \centering
+    %\textbf{Overview of Graphylo's architecture}\par\medskip
+  \includegraphics[width=0.8\textwidth]{figures/architecture.png}
+  \caption{Overview of GraphyloVar's architecture. For a given 65 bp human sequence and its orthologous and inferred ancestral sequences across 115 placental mammals (58 extant species + 57 ancestral nodes), each species' sequence is one-hot encoded and split into forward and reverse strands. Each strand passes through an initial dense layer (32 units) with batch normalization and GELU activation, followed by sinusoidal positional encoding. Two Transformer encoder layers process each strand independently (four attention layers total, forward and reverse complement), capturing sequence patterns and dependencies across the 65 bp window. The processed representations from both strands are concatenated to form a 64-dimensional feature vector per species. A Squeeze-and-Excitation block produces per-species attention weights before these features feed into a two-layer Graph Convolutional Network (GCN) that propagates information along the phylogenetic tree. The GCN output is flattened and passed through a shared fully connected layer (128 units, ReLU) before branching into dual prediction heads: one for allele frequency prediction (a 64-unit dense layer with softmax over A, C, G, T, gap) and another for SNP probability prediction (a 64-unit dense layer with sigmoid). This architecture enables GraphyloVar to simultaneously model nucleotide preferences and variation tolerance at each genomic position.}
+  \label{fig:architecture}
+\end{figure*}
+
+\section{Methods}
+
+GraphyloVar is a deep learning model developed to predict the functional impact of non-coding variants by modeling their full sequence and evolutionary context. The model takes as input a 65 bp human DNA sequence centered on the variant of interest, together with orthologous sequences from 57 other mammals and 57 computationally reconstructed ancestral sequences \citep{blanchette2004aligning, miller200728}. All sequences are organized by a known phylogenetic tree, so that each observed or reconstructed sequence is associated with a tree node, and their relationships follow the tree topology.
+
+The GraphyloVar architecture is hybrid. Transformer encoders extract context-dependent sequence features within the 65 bp input window \citep{NIPS2017_3f5ee243}. Graph Convolutional Networks (GCNs) propagate information along the phylogenetic tree, allowing the model to learn how the nucleotide at a position in one species informs the probabilities of nucleotides at the same position in related species~\citep{kipf2016semi}. By combining sequence features with the explicit tree structure, GraphyloVar uses both local sequence context and cross-species information, enabling more accurate predictions than models that use single-sequence inputs or simple conservation scores.
+
+\subsection{Data Preprocessing}
+
+% \subsubsection{Sequence Alignment and Ancestral Genome Reconstruction}
+
+% The sequence alignment and ancestral genome reconstruction process follow the methodology used in our previous Graphylo work \citep{lim2024graphylo}.
+We utilized multiple sequence alignments (MSAs) from the 100-way whole-genome alignment of vertebrates provided by the UCSC Genome Browser \citep{blanchette2004aligning, miller200728}. For our analysis, we extracted sequences for only the 58 extant placental mammalian species. We restricted the analysis to placental mammals because the Ancestors1.0 ancestral reconstruction achieves higher accuracy within this clade, where the phylogeny is well-established and branch lengths are well-calibrated \citep{blanchette2004reconstructing}; non-mammalian vertebrate sequences were therefore excluded.
+
+To reconstruct the evolutionary history of these sequences, we inferred ancestral genome sequences at the internal nodes of the mammalian phylogenetic tree using the Ancestors1.0 program \citep{blanchette2004reconstructing, 10.1093/bioinformatics/btp600}. This maximum-likelihood approach reconstructs the most probable nucleotide at each position for ancestral species based on the sequences of their descendants and the known phylogenetic relationships. The process resulted in a dataset comprising 115 sequences per alignment block: 58 from extant species and 57 from inferred ancestors.
+For model input, we segmented the genome-wide alignment into 65 bp blocks centered on each variant position, a window size that captures sufficient local sequence context while remaining computationally tractable.
+
+
+\subsection{Model Architecture}
+
+The GraphyloVar architecture consists of two main parts that work in sequence, as shown in Figure~\ref{fig:architecture}. First, the Transformer blocks learn features from aligned DNA sequences \citep{NIPS2017_3f5ee243}. Then, the output of the Transformers is passed to a Graph Convolutional Network (GCN), which processes these features using the structure of the phylogenetic tree \citep{kipf2016semi}. These two modules work together to integrate sequence information with broader evolutionary signals.
+
+\subsubsection{Embedding and Transformer Blocks}
+For each species, sequences are one-hot encoded using a six-letter alphabet (A, C, G, T, -, N). Each 65 bp sequence is then paired with its reverse complement, and both strands are processed in parallel through the same Transformer pathway.
+The one-hot encoded nucleotides first pass through a dense layer with 32 units, followed by batch normalization \citep{batch10.5555/3045118.3045167}, a GELU activation function \citep{GeluHendrycks2016}, and dropout \citep{dropout10.5555/2627435.2670313}, projecting each one-hot vector into a 32-dimensional embedding space. We then add a sinusoidal positional encoding, enabling subsequent transformer layers to capture position-dependent sequence patterns.
+
+For both the forward and reverse strands, the model applies two Transformer blocks in series per strand (four total, processing forward and reverse complement independently) \citep{NIPS2017_3f5ee243}. Transformers are suitable for genomic sequence analysis \citep{ji2021dnabert, benegas2024gpnmsa}. Their main advantage is self-attention, which enables the model to attend to different sequence patterns simultaneously, creating context-aware representations that capture long-range dependencies across the input window.
+After transformer processing, \rev{rather than using global mean pooling, we extract the representation at the center position of each strand, the position corresponding to the variant of interest. The center features from the forward and reverse strands are concatenated into a 64-dimensional representation for each species. Extracting the center (rather than pooling over the full window) ensures that the model's downstream prediction is anchored at the variant site while still benefiting from flanking sequence context propagated via self-attention.}
+
+\subsubsection{Species Attention and Graph Convolution}
+We employ a species attention mechanism, which is a form of Squeeze-and-Excitation (SE) block \citep{hu2018squeeze}. The SE block applies global average pooling to each species' feature vector, passes the result through two fully connected layers with a sigmoid activation to produce species-wise attention weights, and multiplies these weights back onto the original feature representations before the GCN layer.
+
+To model evolutionary relationships, GraphyloVar uses a two-layer GCN on the phylogenetic tree \citep{kipf2016semi}. The nodes correspond to extant or ancestral species. Edges indicate evolutionary relationships. The GCN layers propagate information between connected nodes in the tree, so each species' representation is updated using information from its direct relatives (parent and child nodes). This enables the model to capture functional elements conserved among related species while retaining sensitivity to species-specific patterns. The layer update is:
+\[
+H^{(l+1)} = \sigma\!\left(\tilde{D}^{-\frac{1}{2}}\tilde{A}\tilde{D}^{-\frac{1}{2}}H^{(l)}W^{(l)}\right)
+\]
+Here, \(H^{(l)}\) is the node-feature matrix at layer \(l\). The matrix \(\tilde{A} = A + I\) is the adjacency with self-loops, and \(\tilde{D}\) is its degree matrix. The matrix \(W^{(l)}\) is learnable. The function \(\sigma\) is the GELU nonlinearity \citep{GeluHendrycks2016}. The second layer outputs a 32-dimensional embedding for each species.
+
+\subsubsection{Dual-Output Prediction Heads}
+
+After the GCN, all species embeddings are flattened and passed through a shared fully connected layer (128 units, ReLU activation, dropout). The shared representation then branches into two prediction heads:
+\begin{itemize}
+  \item Allele frequency prediction. A dense layer with 64 units (ReLU, dropout), followed by a final dense layer with softmax outputs a distribution over five states: A, C, G, T, and a gap/unknown state.
+  \item SNP probability prediction. A parallel dense layer (64 units, ReLU, dropout), followed by a final sigmoid neuron predicting the probability that a position is a SNP.
+\end{itemize}
+This dual-output setup provides complementary signals. The allele head models nucleotide preferences. The SNP head models tolerance to variation. Together, they support downstream assessment of variant effects in a consistent framework. \rev{A model component ablation confirms that each architectural element contributes incrementally: the Transformer-only baseline, TF~+~GCN tree, and full model (with species-attention SE gate) each yield progressively higher held-out AUROC across all genomic region categories (Supplementary Figure~\ref{fig:model_ablation}).}
+
+
+\subsection{Model Training and Optimization}
+
+% \subsubsection{Pretraining}
+
+% Conventional DNA foundation models often use masked language modeling with random token masking \cite{ji2021dnabert, Dinh2022}. In contrast,
+GraphyloVar uses a biologically informed pretraining task. We mask only the central human nucleotide in each multiple sequence alignment block. This masking strategy targets the position most directly relevant to variant effect prediction. Unlike masked language models that predict the most probable nucleotide at masked positions \citep{ji2021dnabert, benegas2024gpnmsa}, the model predicts the full population-level allele frequency distribution at the masked locus. The training labels come from the Trans-Omics for Precision Medicine (TOPMed) dataset \citep{burgess2021topmed}, which is a large NIH program with whole-genome sequencing across multiple ancestries.
+We pre-train the model with the Adam optimizer \citep{kingma2014adam} using the default settings in TensorFlow~2.5 \citep{tensorflow2015-whitepaper-short}. Mini-batch size is 64 for the main model (flank $= 32$). \rev{For the allele frequency head, we use categorical cross-entropy loss, which is appropriate for predicting a probability distribution over the five allele states (A, C, G, T, gap). For the SNP probability head, we use binary cross-entropy loss, since polymorphism status is a binary label.} GELU activation is used in the Transformer encoder and GCN layers; the prediction heads use ReLU. To limit overfitting, we use dropout with rate 0.2 and early stopping on validation loss. The main model is trained on TOPMed variants from chromosomes 1-10, validated on chromosomes 11-12, and evaluated on the held-out test set comprising chromosomes 13-22 ($\sim$149M variants).
+
+After the pre-training phase, the model can be used in two primary ways. First, it can be applied directly as a foundation model for zero-shot prediction on various tasks. Alternatively, it can be fine-tuned on specific downstream tasks if labeled data is available. For task-specific fine-tuning, we updated all model weights rather than freezing the pre-trained layers.
+
+% \subsection{Optimization and Hyperparameter Tuning}
+
+% Given the substantial computational resources required for pretraining on large genomic datasets, performing an exhaustive hyperparameter search becomes practically impossible. We tuned the key hyperparameters of the model by evaluating a few candidate values for each parameter while keeping the others constant. This included exploring options for embedding size, number of transformer blocks, number of neurons in the fully connected layers, and the number of GCN layers to find a well-performing configuration without the computational expense of an exhaustive grid search.
+
+We tuned the key hyperparameters of the model by evaluating a few candidate values for each parameter while keeping the others constant. The configuration we found was 2 Transformer layers per strand (4 total), 2 GCN layers with 32-dimensional node embeddings, and a shared fully connected layer with 128 units. This configuration achieved strong predictive performance while remaining computationally tractable.
+
+
+\subsection{GraphyloVar Score: Quantifying Variant Impact}
+
+GraphyloVar's dual-output architecture provides two key pieces of information at each genomic position: (1) a probability distribution over the five allele states \(\{A, C, G, T, \text{gap}\}\), and (2) the probability that the position is polymorphic (i.e., a SNP). To create a measure of a variant's predicted impact, we combine these two outputs into a single score using the reference and alternate nucleotide probabilities.
+
+For a variant at position \(i\), let \(p_a = P(\text{alt}_i \mid \text{MSA}_i, \Theta)\) and \(p_r = P(\text{ref}_i \mid \text{MSA}_i, \Theta)\) denote the model's predicted probabilities for the alternate and reference alleles, and let \(p_s = P(\text{SNP}_i)\) denote the predicted probability that position \(i\) is polymorphic.
+
+The first component is the \textbf{Allele Probability Ratio}, a log-ratio of the alternate- and reference-allele probabilities:
+\begin{equation}
+\text{Allele Ratio}_i \;=\; \log\!\left(\frac{p_a}{p_r}\right).
+\end{equation}
+A lower, more negative score suggests that the alternate allele is much less probable than the reference allele. The model captures this through learned sequence and evolutionary patterns that indicate the reference allele is under functional constraint. Therefore, a substitution to a low-probability alternate allele is likely to be deleterious.
+
+However, the allele ratio alone does not account for overall tolerance for variation. A site might be highly conserved, meaning any change is likely to be damaging, regardless of the specific alternate allele. To address this, the final \textbf{GraphyloVar Score} incorporates the predicted SNP probability \(p_s\) and is defined as:
+\begin{equation}
+\text{GraphyloVar Score}_i \;=\; \log\!\left(\frac{p_s\, p_a}{p_s\, p_r + (1 - p_s)}\right).
+\end{equation}
+This combined score offers a more complete picture because if a site is predicted to be highly conserved (\(p_s\) is low), the numerator becomes small, resulting in a very low (more deleterious) score for any alternate allele. This correctly reflects that changes at invariant sites are likely harmful. It also retains allele-specific constraint: if a site is predicted to be variable (\(p_s\) is high), the score is mainly driven by the ratio \(p_a / p_r\). Lower GraphyloVar scores indicate variants predicted to be more damaging.
+
+\subsection{Baseline Approaches and Datasets}
+
+To evaluate GraphyloVar's performance, we conducted comparisons against diverse established methods for variant effect prediction. These baseline methods represent a spectrum of approaches, from traditional conservation metrics to advanced machine learning models, each capturing different aspects of genomic function.
+
+\paragraph{PhyloP \citep{pollard2010detection}} PhyloP measures evolutionary constraint at individual nucleotides by comparing observed substitution rates to neutral evolution. It produces site-specific scores where positive values indicate conservation. Although effective for single-site constraint scoring, it does not capture broader sequence context. We utilized 100-way vertebrate PhyloP scores from the UCSC Genome Browser.
+
+\paragraph{PhastCons \citep{siepel2005evolutionarily}} In contrast to PhyloP, PhastCons uses a hidden Markov model to identify contiguous conserved elements. It models phylogenetic relationships to detect genomic stretches under purifying selection, making it suitable for regulatory elements that function as cohesive units. We used the 100-way vertebrate PhastCons conservation probabilities.
+
+\paragraph{CADD \citep{kircher2014general}} CADD integrates genomic annotations into a pathogenicity score using a support vector machine trained to distinguish simulated from observed variants. It combines conservation metrics and functional data to assess potential deleteriousness in both coding and non-coding regions. We used CADD v1.7 scores (GRCh38) for our evaluation.
+
+\paragraph{Enformer \citep{avsec2021effective}} uses a transformer architecture with self-attention to capture long-range interactions (input window $\approx 200$~kb). As the original method does not provide a standard variant effect score, we derived Enformer-based scores in two settings. For the zero-shot MAF discrimination task (Section~3.1), we trained a two-layer fully connected neural network (256 hidden units per layer, ReLU activations, dropout rate 0.3) taking the difference between Enformer's reference and alternative allele predictions as input features to predict CADD targets, using the same chromosome-level train/val/test split as the main model. For the MPRA benchmarks (Section~3.3), we trained a separate two-layer DNN (same architecture) on Enformer features with MPRA binary labels, using the same leave-one-out cross-validation as the other MPRA models.
+
+\paragraph{\rev{GPN-MSA \citep{benegas2024gpnmsa}}} \rev{is conceptually similar to GraphyloVar in using multiple sequence alignments but differs architecturally. It processes concatenated alignment columns through transformers, which do not explicitly preserve phylogenetic relationships.}
+
+\paragraph{\rev{GPN-Star}} \rev{GPN-Star~\citep{benegas2024gpnmsa} is an MSA-aware extension of GPN-MSA, included here as a contemporary MSA-based baseline. The large-scale genomic foundation model Evo2~\citep{nguyen2024sequence} has inference requirements (compute capability 8.9 or higher, Ada or Hopper class GPUs) that exceed our current hardware; we therefore exclude it from the quantitative benchmark and note it as an important future comparison point.}
+
+\rev{We selected these baselines to represent diverse approaches, including conservation metrics (PhyloP, PhastCons), integrative frameworks (CADD), sequence deep learning (Enformer), and MSA-aware models (GPN-MSA, GPN-Star). While the dbNSFP database contains over 36 algorithms, we focused on these methodologically distinct families to avoid redundancy while still covering the major landscape of variant effect prediction approaches.}
+
+% \subsection{Massive Parallel Reporter Assay Analysis}
+
+% Conventional association studies are typically used to identify disease-linked variants, but often struggle with linkage disequilibrium (LD), making it difficult to distinguish causal variants from correlated SNPs \citep{uffelmann2021gwas}. To overcome this limitation and directly assess Graphylo's ability to predict functional non-coding variant effects, we evaluated our model against several Massively Parallel Reporter Assay (MPRA) datasets. MPRAs provide experimental measurements of variant effects on gene expression through the testing of thousands of sequence variants in cellular contexts, offering a more direct indication of regulatory impact, compared to population-based association studies.
+
+To evaluate predictions against experimental data, we compiled a broad collection of Massively Parallel Reporter Assay (MPRA) datasets, covering various regulatory contexts and disease associations.
+For MPRA studies that focus on enhancer and promoter regions, we incorporated data from studies investigating psychiatric disorders, including schizophrenia \citep{Myint2020} and major depressive disorder \citep{Mulvey2021}, as well as neurodegenerative conditions such as Alzheimer's disease and dementia \citep{Myint2020, Cooper2022}. We also included cancer-related datasets that focus on melanoma \citep{Long2022, Choi2020} and multiple myeloma \citep{Ajore2022}, along with autoimmune conditions such as lupus \citep{Lu2021}. To represent expression-modulating variants in non-disease contexts, we included data from an eQTL-focused reporter assay \citep{Tewhey2016}.
+\rev{We also analyzed MPRA studies that focused on 3'~UTR variants. \citet{Griesemer2021} conducted a genome-wide functional screen identifying causal 3'~UTR variants for human disease and evolution using GWAScatalog annotations. \citet{Schuster2023} characterized 3'~UTR variants associated with prostate cancer susceptibility. These two datasets form the 3'~UTR MPRA group in Figure~\ref{fig:MPRA}.}
+\rev{For genome-wide MPRA analyses spanning diverse loci and regulatory contexts, we incorporated three additional datasets. \citet{Kircher2019} performed saturation mutagenesis of 20 disease-associated regulatory elements at single base-pair resolution. \citet{Abell2022} measured the regulatory effects of variants at multiple fine-mapped GWAS loci to resolve causal alleles underlying genetic associations in humans. \citet{McAfee2023} systematically investigated the allelic regulatory activity of schizophrenia-associated common variants across 5{,}173 fine-mapped GWAS loci. These three datasets form the genome-wide analyses group in Figure~\ref{fig:MPRA}.}
+
+\subsection{Implementation}
+
+GraphyloVar was implemented in Python 3.9 using TensorFlow 2.5 on NVIDIA Quadro RTX 6000 GPUs (compute capability 7.5). Code is available at \url{https://github.com/DongjoonLim/GraphyloVar}. % We used Biopython, NumPy, and pandas for data handling, and custom modules based on Ancestors1.0 for phylogenetic manipulation.
+
+
+\begin{figure*}[ht!]
+    \centering
+    \begin{minipage}{0.97\textwidth}
+        \textbf{(A)}\\
+        \includegraphics[width=\textwidth]{figures/combined_auc_bar_chart.png}
+    \end{minipage}
+
+    \vspace{1em}
+
+    \begin{minipage}{0.97\textwidth}
+        \textbf{(B)}\\
+        \includegraphics[width=\textwidth]{figures/MAF_bin.png}
+    \end{minipage}
+
+    \caption{\rev{GraphyloVar's performance distinguishing common from rare variants. \textbf{(A)} AUROC for four UCSC-annotated genomic region types (Coding, 3'~UTR, cCREs, TE), evaluated on held-out variants from chromosomes~13 to 22. Only variants with a region annotation are included; unannotated intergenic variants are excluded from this panel (see Figure~\ref{fig:ensemble} and Section~3.1 for the full 149M-variant benchmark). GraphyloVar achieves AUROC $0.674$ in coding regions, $0.674$ in cCREs, $0.652$ in 3'~UTRs, and $0.655$ in transposable elements, consistently outperforming all baselines. \textbf{(B)} Mean MAF (log scale) across variant score bins (1-20). GraphyloVar scores show clearer stratification of variants by frequency than competing methods, with higher-constraint bins corresponding to lower MAF, consistent with purifying selection.}}
+    \label{fig:MAFBinary}
+\end{figure*}
+
+
+
+
+\begin{figure*}[ht!]
+    \centering
+    {\includegraphics[width=0.9\textwidth]{figures/MPRA_results.png}}
+    \caption{Heatmap showing AUROC values for different prediction methods (rows) evaluated on 13 MPRA datasets (columns) grouped by types of genomic contexts: enhancer/promoter regions (left), 3'~UTRs (middle), and genome-wide analyses (right). The bottom 3 rows show GraphyloVar fine-tuned on MPRA data (Graphylo\_finetuned), GraphyloVar trained directly on MPRA labels without pre-training (Graphylo\_Direct), and a DNN trained on Enformer features to predict MPRA positive SNPs; all three use leave-one-out cross-validation within each region group.}
+    \label{fig:MPRA}
+\end{figure*}
+
+
+
+
+\section{Results}
+% We evaluated GraphyloVar's performance across multiple datasets and benchmarking tasks. First, the model was pre-trained on population-level allele frequency data from the TOPMed dataset. Then, this pre-trained model was assessed using population variation data, experimental measurements of regulatory effects (like MPRAs), and comparisons with established variant impact prediction methods.
+
+
+\subsection{Differentiating Common Variants from Rare Variants}
+
+To evaluate GraphyloVar's ability to capture evolutionary constraints that influence allele frequencies, we assessed its zero-shot performance (using the model directly after pre-training without task-specific fine-tuning). Specifically, we tested whether the model could distinguish between common variants (Minor Allele Frequency (MAF) $\geq$ 0.01) and rare variants (MAF $<$ 0.001) in the human population. We used a chromosome-level holdout strategy: chromosomes 13-22 were excluded entirely from pre-training and validation. All evaluation variants were drawn exclusively from these held-out chromosomes, yielding approximately 149~million held-out SNVs from the TOPMed whole-genome sequencing cohort \citep{burgess2021topmed}. This chromosome-level partition eliminates positional leakage while ensuring evaluation variants are drawn from a diverse genomic background. This distinction is biologically important, as variants under stronger purifying selection tend to be maintained at lower frequencies in the population.
+
+\rev{Figure~\ref{fig:MAFBinary}A presents the performance of GraphyloVar compared to established methods (GPN-MSA, GPN-Star, PhyloP, PhastCons, CADD, and Enformer) in different types of genomic contexts. For each method, we calculated the area under the Receiver Operating Characteristic curve (AUROC) to quantify classification performance between common and rare variants.}
+\rev{The performance advantage was consistent across annotated genomic contexts (Figure~\ref{fig:MAFBinary}A). Among UCSC-annotated variants, GraphyloVar achieves AUROC of $0.674$ in coding regions, $0.674$ in cCREs, $0.652$ in 3'~UTRs, and $0.655$ in transposable elements. Note that Figure~\ref{fig:MAFBinary}A shows only annotated variants; unannotated intergenic variants are excluded from this panel. On the full held-out set of $\sim$149M variants (including unannotated intergenic regions), the overall AUROC is $0.6246$ (Figure~\ref{fig:ensemble}); the lower value reflects the harder discrimination task when intergenic variants---which have weaker conservation signal---are included. Region-resolved values on the complete holdout are provided in Supplementary Table~\ref{tab:flank_ablation}.}
+
+The relationship between predicted scores and actual allele frequencies is further illustrated in Figure~\ref{fig:MAFBinary}B, which plots the mean minor allele frequency (log scale) across score bins (1-20) for each method. The ground truth panel (variants sorted by true MAF) shows the expected steep inverse relationship, with rare variants in the low-MAF bins. Among the prediction methods, GraphyloVar scores demonstrate the clearest stratification of variants by frequency. CADD and the Enformer-based DNN show relatively flat results, indicating limited ability to discriminate between variants under different levels of selective pressure. PhyloP and GPN-MSA show moderate correlations with allele frequency.
+These results indicate that GraphyloVar achieves strong discriminative performance across different genomic region types. This advantage stems from the model's ability to leverage both sequence-specific features through transformer encoders and phylogenetic relationships through GCNs.
+
+
+% \begin{table}[ht!]
+% \centering
+% \caption{Spearman Correlations between scores and observed minor allele frequencies for Different Methods}
+% \label{tab:correlation}
+% \begin{tabular}{|c|c|c|}
+% \hline
+% \textbf{Method}  & \textbf{Spearman Correlation} \\ \hline
+% GraphyloVar  & 0.16442 \\ \hline
+% GPN-MSA  & 0.14307 \\ \hline
+% PhyloP  & 0.09946 \\ \hline
+% PhastCons  & 0.05808 \\ \hline
+% CADD  & 0.08129 \\ \hline
+% Enformer  & 0.13082 \\ \hline
+% \end{tabular}
+% \end{table}
+
+
+\subsection{Correlation with Observed Minor Allele Frequencies}
+
+To further evaluate how well different methods capture the evolutionary constraints that shape allele frequency distributions, we calculated the Spearman correlation between predicted scores and observed minor allele frequencies on the held-out chromosomes 13 to 22 variant set. As shown in Table~\ref{tab:spearman}, GraphyloVar achieved the highest correlation (0.164), exceeding all baselines. This higher correlation indicates that GraphyloVar's predictions better reflect the underlying selective pressures that determine the frequency of genetic variants in human populations.
+
+\begin{table}[h!]
+\centering
+\caption{\rev{Spearman correlation between predicted variant scores and observed minor allele frequency (MAF) on the held-out chromosomes 13-22 TOPMed variant set ($\sim$149M variants). Higher values indicate stronger alignment with population-level selective constraints.}}
+\label{tab:spearman}
+\begin{tabular}{lc}
+\hline
+\textbf{Method} & \textbf{Spearman $\rho$} \\
+\hline
+GraphyloVar & \textbf{0.164} \\
+GPN-MSA & 0.143 \\
+Enformer & 0.131 \\
+PhyloP & 0.099 \\
+CADD & 0.081 \\
+PhastCons & 0.058 \\
+\hline
+\end{tabular}
+\end{table}
+
+GraphyloVar's integration of phylogenetic structure yields a stronger Spearman correlation with observed minor allele frequency ($\rho=0.164$) than all baseline methods ($\rho$ ranging from 0.058 to 0.143 across baselines, including site-level conservation metrics, integrative frameworks, and MSA-aware models). By capturing both sequence-specific features and evolutionary relationships, GraphyloVar better distinguishes variants likely to be tolerated from those likely to be deleterious and thus maintained at lower frequencies.
+
+
+
+\subsection{Predicting Variant Effects in Massively Parallel Reporter Assays}
+
+To evaluate GraphyloVar's ability to predict functional effects of non-coding variants on gene regulation, we benchmarked our model against multiple MPRA datasets spanning diverse regulatory contexts. Figure~\ref{fig:MPRA} shows the performance (AUROC) of various prediction methods across 13 different MPRA studies organized into three types of genomic regulatory contexts: enhancer/promoter regions (8 datasets), 3'~UTRs (2 datasets), and genome-wide assessments (3 datasets).
+
+% The pre-trained GraphyloVar foundation models (without task-specific fine-tuning) showed comparable but not superior performance to existing methods like CADD, Enformer, PhastCons, PhyloP, and GPN-MSA. We then tested several variants of GraphyloVar model: the basic GraphyloVar score derived from allele frequency predictions, GraphyloVar Polymorphism score based on predicted variant probability, and Combined Score that integrates both predictions. Across these variants, performance was generally poor and similar with other established methods.
+
+
+\begin{figure}[ht!]
+  \centering
+  \includegraphics[width=\columnwidth]{figures/heatmap.png}
+  \caption{Spearman correlation among variant scoring methods, calculated on a held-out TOPMed SNP dataset that was excluded from the pre-training data.}
+  \label{fig:scores}
+\end{figure}
+
+\subsubsection{Performance Improvements Through Fine-tuning}
+
+Given GraphyloVar's ability to extract evolutionary signals, we explored two strategies to enhance performance: (1) fine-tuning the pre-trained model on MPRA data, and (2) training a new GraphyloVar model directly on MPRA data without the evolutionary pre-training stage. Additionally, we compared these approaches with a fully connected deep neural network trained on Enformer features with MPRA binary labels (see Methods, Enformer paragraph).
+
+GraphyloVar was fine-tuned separately for each type of genomic region and evaluated using a leave-one-out cross-validation approach to mitigate potential training biases. For example, for the enhancer/promoter group (8 MPRA datasets), we conducted eight independent experiments, where in each iteration, one MPRA dataset was designated as the test set while the model was fine-tuned on the remaining seven. This strategy ensures that the evaluation reflects the model's ability to generalize across different datasets within the same regulatory region category. The same strategy was applied to the other two models.
+
+As shown in Figure~\ref{fig:MPRA}, the fine-tuned GraphyloVar models (Graphylo\_finetuned) demonstrated the strongest performance across all MPRA datasets, achieving the highest AUROC on all 13 datasets. In enhancer/promoter regions, this model achieved AUROC values ranging from 0.615 to 0.708.
+The GraphyloVar models trained directly on MPRA data without pre-training (Graphylo\_Direct) and the DNN trained on Enformer scores also showed strong performance, but consistently below Graphylo\_finetuned.
+These findings demonstrate that while GraphyloVar's architecture captures core evolutionary signals that support zero-shot performance, incorporating task-specific experimental data through fine-tuning improves variant effect prediction. The pre-trained phylogenetic representations provide a generalizable foundation that the fine-tuning step adapts to MPRA-specific regulatory signals.
+
+
+
+\subsection{Complementarity of GraphyloVar Scores with Existing Methods}
+
+To assess whether GraphyloVar captures novel and complementary information compared to existing methods, we calculated the Spearman correlation between scores from different predictive approaches. Figure~\ref{fig:scores} presents a correlation matrix among genomic scoring methods, including GraphyloVar, PhastCons, PhyloP, CADD, Enformer, and GPN-MSA. Notably, GraphyloVar shows weak-to-moderate correlations with existing methods, indicating that it captures distinct information while still reflecting shared functional signals.
+\rev{As expected, traditional conservation metrics like PhastCons and PhyloP show stronger correlations with each other than with GraphyloVar, suggesting that GraphyloVar captures signals beyond simple nucleotide-level conservation. In the current Spearman analysis, GraphyloVar shows only weak-to-moderate correlation with major baselines such as CADD and PhyloP, which suggests that its signal is partly different from existing methods.}
+
+\rev{To further test this, we combined GraphyloVar with CADD using a simple z-score ensemble: both scores are independently z-normalized (mean 0, standard deviation 1) over all $\sim$149M held-out variants; because CADD is oriented so that higher scores indicate greater deleteriousness (i.e., rarer variants), its z-score is negated so that the direction aligns with GraphyloVar (higher = more common); the ensemble score is then the row-wise mean of the two sign-aligned z-scores. No new network is trained---the combination is a parameter-free arithmetic operation. GraphyloVar achieves an overall held-out AUROC of $0.6246$ on the full $\sim$149M~TOPMed test set. Sign-aligned CADD achieves $\approx 0.5546$. The z-score ensemble achieves an AUROC of $0.6442$, a gain of $+0.020$ over GraphyloVar alone (Figure~\ref{fig:ensemble}). Together, the low Spearman correlations and the ensemble AUROC gain confirm that GraphyloVar captures information that CADD does not.}
+
+\rev{To assess the statistical significance of the ensemble gains, we conducted paired two-sided DeLong tests on a uniform random sub-sample of $500{,}000$ held-out variants. The GraphyloVar~+~CADD ensemble significantly outperforms every individual baseline (vs.\ GraphyloVar alone: $\Delta$AUROC$=+0.0207$, $z=12.24$, $p<10^{-15}$; vs.\ CADD: $\Delta=+0.0950$, $z=30.62$, $p<10^{-15}$). Bootstrap percentile $95\%$ confidence intervals ($B=1000$, sub-sample $n=200{,}000$) yield a point estimate of $0.6496$ $[0.6395,\,0.6587]$ for GraphyloVar~+~CADD and $0.6271$ $[0.6174,\,0.6368]$ for GraphyloVar alone, with non-overlapping intervals; the difference between the sub-sample estimate ($0.6496$) and the full 149M-variant estimate ($0.6442$) reflects sampling variation at $n=200{,}000$ versus $n{\approx}149\text{M}$.}
+
+\begin{figure*}[ht!]
+\centering
+\includegraphics[width=0.82\textwidth]{figures/fig_ensemble_auroc.png}
+\caption{\rev{Held-out AUROC for individual variant scoring methods and the GraphyloVar~+~CADD z-score ensemble, evaluated on all ${\sim}$149M TOPMed variants (chromosomes~13 to 22; common vs.\ rare variant discrimination). Unlike Figure~\ref{fig:MAFBinary}A, which shows only UCSC-annotated region types, this benchmark includes the full variant set with unannotated intergenic sites, giving a $0.6246$ AUROC baseline for GraphyloVar. The ensemble is parameter-free: each score is independently z-normalized; CADD's z-score is negated to align polarity; the ensemble is the row-wise mean. Error bars show bootstrap 95\% confidence intervals ($B=1{,}000$, sub-sample $n \approx 200{,}000$). The ensemble achieves AUROC $= 0.6442$, a gain of $+0.020$ over GraphyloVar alone ($p < 10^{-15}$, DeLong test on 500{,}000 held-out variants). Non-overlapping bootstrap confidence intervals confirm that the ensemble gain is reliable and that GraphyloVar captures information that CADD does not.}}
+\label{fig:ensemble}
+\end{figure*}
+
+\subsection{\rev{Context Window Ablation}}
+
+\rev{To justify the default 65 bp context window (32 bp flank on each side of the variant, plus the variant position), we trained models with three context-window settings: flank $\in \{16, 32, 100\}$ base pairs, corresponding to input sequences of 33, 65, and 201 bp respectively. All models were trained on TOPMed chromosomes 1-10 with chromosomes 11-12 as validation, using the same training procedure (mixed precision, patience = 30, Adam with ReduceLROnPlateau).}
+
+As shown in Supplementary Table~\ref{tab:flank_ablation}, the region-resolved held-out AUROC values confirm that flank $= 32$ (65~bp) achieves the highest overall held-out AUROC ($0.625$) among the three settings, outperforming the narrower flank $= 16$ window ($0.622$) and the wider flank $= 100$ window ($0.617$). This result directly validates the choice of the 65~bp main model: the 65~bp window most efficiently balances local sequence context for zero-shot common-versus-rare discrimination. The fine-tuned flank $= 32$ model also demonstrates strong regulatory prediction performance, achieving the highest AUROC across all 13 MPRA benchmark datasets (Section~3.3). Exploring yet-wider windows (flank $> 100$~bp) may improve performance on tasks requiring longer-range regulatory context, and we leave this direction for future work.
+
+
+\subsection{\rev{GCN Interpretability and Species Importance}}
+
+\input{../gcn_shape_paragraph.tex}
+
+\rev{We investigated species-level importance using an additive perturbation analysis: for each of the 58 extant placental mammal species, we replaced all other alignment rows with a gap token and measured the decrease in nucleotide cross-entropy ($\Delta$~CE) compared to an all-gap baseline on 500,000 held-out variants (chromosomes~13 to 22). This quantifies the isolated information content of each species independently of the others. As shown in Figure~\ref{fig:species_importance}, 53 of 58 species provide positive additive signal, with Human supplying the largest contribution ($\Delta$CE $= 7.1$). Among non-human species, four diverged primates form a prominent cluster: Orangutan ($\Delta$CE $= 1.50$), Green monkey ($1.50$), Gorilla ($1.24$), and Gibbon ($0.62$). Non-primate mammals show a broad range of smaller but positive contributions ($\Delta$CE $= 0.002$ to $0.12$), showing that the full multi-species alignment provides useful conservation signal beyond primates alone. Five species (Baboon, Rhesus macaque, Marmoset, Squirrel monkey, Jerboa) show near-zero or slightly negative additive values (displayed at figure floor in grey), likely because of sparse alignment coverage at these variant sites.}
+
+\rev{Chimpanzee, despite being the closest relative of humans ($\approx$98.7\% sequence identity), ranks 11th in additive importance ($\Delta$CE $= 0.062$), well below Orangutan ($1.50$). This is explained by information redundancy: Chimpanzee's sequence is nearly identical to Human's, so the model extracts similar evolutionary signal from both. The leave-one-out marginal contribution of Chimpanzee confirms this: masking Chimpanzee while Human is present yields $\Delta$CE $\approx -2.4 \times 10^{-6}$, within statistical noise, indicating that Chimpanzee adds no incremental information on top of the Human row. In contrast, Orangutan, Green monkey, Gorilla, and Gibbon are sufficiently diverged to provide non-redundant context, explaining their higher importance in both additive and marginal analyses.}
+
+\rev{The SE-attention gate also supports this pattern: the per-species sigmoid gate learned by the Squeeze-and-Excitation block gives higher weights to species with more useful evolutionary signal. Human ($\approx 1.00$), Orangutan ($0.54$), Green monkey ($0.40$), Gibbon ($0.34$), and Gorilla ($0.29$) have the highest gate values, while Chimpanzee has the lowest gate among great apes ($\approx 0.011$), consistent with its near-zero perturbation importance. Species with near-zero or negative additive importance (Baboon $\approx 10^{-4}$, Marmoset $\approx 2\times10^{-6}$) also show near-zero gate values. This shows that the learned weights match the perturbation importance rankings, and that the model learns to use the phylogenetic tree structure rather than treating all species equally.}
+
+
+\rev{A phylogenetic tree ablation confirms that performance increases monotonically} as more species are included: restricting the model to Human alone, then adding all Primates, and finally including the full placental mammalian tree each yields consistent AUROC gains across all genomic region categories (Supplementary Figure~\ref{fig:tree_ablation}), showing that non-primate mammalian sequences also contribute useful evolutionary signal.
+
+\begin{figure*}[ht!]
+\centering
+\includegraphics[width=0.95\textwidth]{figures/gcn_species_importance.png}
+\caption{Additive species importance ($\Delta$ nucleotide cross-entropy decrease when each species is added to an all-gap baseline) for all 58 extant placental mammals, evaluated on 500,000 held-out variants (chromosomes~13 to 22). Species are sorted by decreasing importance; bars are colored by mammalian clade (see legend). The y-axis is logarithmic. Five species with near-zero or marginally negative additive values (Baboon, Rhesus macaque, Marmoset, Squirrel monkey, Jerboa) are displayed at the figure floor in grey. Human provides the largest isolated signal ($\Delta$CE $= 7.1$). Among non-human species, four diverged primates, Orangutan ($1.50$), Green monkey ($1.50$), Gorilla ($1.24$), and Gibbon ($0.62$), form a clearly elevated cluster, followed by a broad band of non-primate mammals ($0.002$ to $0.12$). Chimpanzee ranks 11th ($\Delta$CE $= 0.062$), consistent with information redundancy: its near-identical sequence ($\approx$98.7\% identity) provides little additive signal beyond what Human already encodes.}
+\label{fig:species_importance}
+\end{figure*}
+
+
+\begin{figure*}[ht!]
+  \centering
+  \includegraphics[width=0.9\textwidth]{figures/coverage.png}
+  \caption{AUROC for fine-tuned GraphyloVar (Graphylo\_finetuned) and directly trained GraphyloVar (Graphylo\_Direct) models across three alignment coverage ranges (0-25\%, 25-75\%, 75-100\%), evaluated on MPRA benchmark datasets. Alignment coverage is defined as the fraction of positions in the 65 bp window that contain observed nucleotides rather than gaps or missing data characters.}
+  \label{fig:coverage}
+\end{figure*}
+
+\subsection{Alignment Coverage Analysis}
+
+We investigated the impact of alignment coverage, defined as the fraction of positions in the 65 bp alignment window containing observed nucleotides rather than gaps (-) or missing data (N) characters.
+Figure~\ref{fig:coverage} shows the performance of the Graphylo\_finetuned and Graphylo\_Direct models in three coverage percentile ranges: 0-25\% (low coverage), 25-75\% (moderate coverage), and 75-100\% (high coverage). The results reveal a clear relationship between alignment coverage and predictive accuracy in all genomic contexts.
+In the lowest coverage percentile (0 to 25\%), both models show reduced performance. This is because sparse evolutionary information limits the Graph Convolutional Network's ability to use phylogenetic relationships. Performance stabilizes between moderate (25 to 75\%) and high (75 to 100\%) coverage ranges, with similar AUROC values across both percentiles.
+These findings establish clear operating guidelines: regions with alignment coverage below 25\% yield reduced predictive accuracy and should be interpreted with caution, while moderate-to-high coverage regions yield reliable predictions.
+
+\subsection{Computational Time and Scalability}
+While GraphyloVar's incorporation of phylogenetic information enhances prediction accuracy, it introduces additional computational complexity compared to single-sequence models.
+GraphyloVar training required approximately 280 hours on a single NVIDIA Quadro RTX 6000 GPU to complete pretraining on the TOPMed dataset. For prediction, GraphyloVar predicts approximately 20 variants per second on the same hardware.
+
+
+\section{Discussion and Conclusion}
+
+GraphyloVar integrates deep learning and comparative genomics to predict the functional effects of genomic variants. By combining Transformer encoders for sequence feature extraction with Graph Convolutional Networks for phylogenetic modeling, the approach leverages multi-species alignments to identify evolutionary signals often missed by methods that focus on single-species sequences or site-level conservation metrics.
+
+Our results demonstrate that GraphyloVar achieves competitive-to-superior performance across variant effect prediction benchmarks, with particular advantages in MAF stratification and fine-tuned MPRA prediction. The pre-trained model effectively distinguishes common from rare variants zero-shot, and after fine-tuning, accurately predicts regulatory effects measured in MPRA experiments. These advantages are especially apparent in non-coding regions, where traditional conservation-based approaches often struggle to identify functional elements subject to complex evolutionary constraints.
+
+\input{../phact_paragraph.tex}
+
+Pre-training on allele frequency prediction provides a biologically informed objective that captures evolutionary selective constraints more directly than conventional masked language modeling. By predicting population-level allele frequency distributions, the model internalizes the selective pressures shaping genomic variation, enabling effective zero-shot performance without requiring task-specific fine-tuning.
+GraphyloVar's dual-output architecture, which predicts both allele frequencies and SNP probabilities, captures complementary aspects of evolutionary constraint. The primary score effectively identifies substitutions that replace evolutionarily favored nucleotides with disfavored ones, whereas the polymorphism score integrates information about the overall tolerance of variation at each position. This dual perspective aligns with the mechanistic understanding of how natural selection shapes genomic variation through both nucleotide-specific and position-specific constraints.
+
+The interpretability analyses offer a partial mechanistic explanation for GraphyloVar's performance. The additive species-importance analysis shows that 53 of 58 extant placental mammals contribute positive isolated signal, with Human providing the largest contribution ($\Delta$CE $= 7.1$) and four diverged primates (Orangutan, Green monkey, Gorilla, Gibbon; $\Delta$CE $= 0.62$ to $1.50$) forming a distinct secondary cluster. Non-primate mammals contribute a broad but real gradient ($\Delta$CE $= 0.002$ to $0.12$). Chimpanzee ranks 11th ($\Delta$CE $= 0.062$) despite its closest evolutionary proximity, because its $\approx$98.7\% sequence identity with Human results in near-zero marginal contribution (leave-one-out $\Delta$CE $\approx -2.4 \times 10^{-6}$): the model has effectively learned that Chimpanzee's signal is redundant with the Human row already in the alignment. These findings are consistent with a model that identifies nucleotide substitutions at constrained positions by integrating conservation signals across the full placental mammalian tree.
+
+Despite these advantages, some limitations remain. The reliance on multiple sequence alignments requires extensive computational time compared to single-sequence methods. Additionally, the current implementation focuses on substitutions rather than larger structural variants. Future work could address these constraints by exploring more efficient alignment processing, direct modeling of structural variants, integration with functional genomic data to capture tissue-specific effects, and wider context windows (flank $> 100$~bp) that may better capture long-range regulatory interactions in enhancer and promoter contexts.
+
+In conclusion, GraphyloVar introduces an approach for variant effect prediction that integrates deep learning with explicit modeling of phylogenetic relationships. The pre-training strategy, which predicts population-level allele frequencies, yields a foundation model that captures fundamental evolutionary constraints. Although the pre-trained foundation supports zero-shot variant prioritization, fine-tuning on task-specific experimental data (such as MPRA measurements) improves regulatory effect prediction. By leveraging evolutionary information through this pre-training and fine-tuning paradigm, GraphyloVar provides a complementary tool for prioritizing functionally relevant non-coding variants.
+
+
+
+
+\section{Data and Code Availability}
+GraphyloVar source code, trained model weights (flank=32 checkpoint), and preprocessing scripts are available at \url{https://github.com/DongjoonLim/GraphyloVar}. The TOPMed whole-genome sequencing data used for pre-training are available through dbGaP (accession phs000964). UCSC 100-way vertebrate whole-genome alignments are publicly available at \url{https://hgdownload.soe.ucsc.edu/goldenPath/hg38/multiz100way/}. MPRA datasets used for evaluation are available from the original publications cited in Section~2.5.
+
+\section{Funding}
+This work was supported by a Discovery grant from the Natural Sciences and Engineering Research Council of Canada (NSERC). We acknowledge Calcul Qu\'ebec and Compute Canada for providing computational resources.
+
+\section{Competing interests}
+No competing interest is declared.
+
+\section{Author contributions statement}
+
+D.L. and M.B. conceived the experiments, D.L. conducted the experiments, D.L. and M.B. analysed the results. D.L. and M.B. wrote and reviewed the manuscript.
+
+\section{Acknowledgments}
+We thank all members of the Blanchette Lab for their feedback.
+% Faizy Ahsan, Zichao Yan, Audrey Baguette, Yanlin Zhang, Elliot Layne, Adam Stecklov, Lucas Nelson, Noah El Rimawi-Fine, Yijie Zhang, Nicole Zhang, Atia Amin, C\'esar Miguel Valdez Cordova for their  feedback and helpful discussions during the preparation of this manuscript.
+
+
+
+
+
+
+
+
+% \bibliographystyle{plain}
+% \bibliography{reference}
+
+%USE THE BELOW OPTIONS IN CASE YOU NEED AUTHOR YEAR FORMAT.
+\bibliographystyle{abbrvnat}
+\bibliography{reference_curated}
+
+% % Use abbrv to shorten first names (e.g., D. Lim instead of Dongjoon Lim)
+% \bibliographystyle{abbrv}
+% % OR, if the journal uses numbered citations ( [1], [2] ) use:
+% % \bibliographystyle{unsrt}
+
+
+
+%% sample for biography with author's image
+% \begin{biography}{{\color{black!20}\rule{77pt}{77pt}}}{\author{Author Name.} This is sample author biography text. The values provided in the optional argument are meant for sample purposes. There is no need to include the width and height of an image in the optional argument for live articles. This is sample author biography text this is sample author biography text this is sample author biography text this is sample author biography text this is sample author biography text this is sample author biography text this is sample author biography text this is sample author biography text.}
+% \end{biography}
+
+% %% sample for biography without author's image
+% \begin{biography}{}{\author{Author Name.} This is sample author biography text this is sample author biography text this is sample author biography text this is sample author biography text this is sample author biography text this is sample author biography text this is sample author biography text this is sample author biography text.}
+% \end{biography}
+
+
+
+
+
+
+
+
+\clearpage
+\setcounter{figure}{0}
+\renewcommand{\thefigure}{S\arabic{figure}}
+\setcounter{table}{0}
+\renewcommand{\thetable}{S\arabic{table}}
+\section*{Supplementary Material}
+
+\subsection*{Supplementary Figure~S1: Phylogenetic Tree Ablation}
+
+\begin{figure*}[h!]
+\centering
+\includegraphics[width=0.85\textwidth]{figures/tree_ablation.png}
+\caption{Phylogenetic tree ablation: held-out AUROC when the model is restricted to the Human sequence only, to all Primate species, or to the full placental mammalian tree, evaluated across five genomic region categories (All, Coding, 3'UTR, cCREs, Transposable Elements). Performance increases monotonically as more of the tree is included, demonstrating that non-primate mammalian sequences contribute incremental but consistent signal beyond the primate subtree alone.}
+\label{fig:tree_ablation}
+\end{figure*}
+
+\subsection*{Supplementary Figure~S2: Model Component Ablation}
+
+\begin{figure*}[h!]
+\centering
+\includegraphics[width=0.85\textwidth]{figures/model_ablation.png}
+\caption{Model component ablation: held-out AUROC for three model variants evaluated across six genomic region categories (All, Coding, 3'UTR, cCREs, Transposable Elements, and Other annotated regions). Transformers only: sequence encoder without any phylogenetic component. TF+Tree: Transformer encoder combined with the GCN phylogenetic tree, without the species-attention (SE) gate. TF+Tree+species attention (Original): the full GraphyloVar model. Each additional component yields a consistent AUROC improvement across all region types, confirming that the phylogenetic GCN is the largest single contributor beyond the sequence-only baseline, and that the SE attention gate provides further gains.}
+\label{fig:model_ablation}
+\end{figure*}
+
+
+\subsection*{Supplementary Table~S1: Context Window Ablation}
+
+\begin{table*}[h!]
+\centering
+\small
+\caption{\rev{Region-resolved held-out AUROC for three context-window sizes, evaluated on the full ${\sim}$149M TOPMed SNVs from chromosomes~13 to 22. The main benchmark model (flank $= 32$, 65~bp) is indicated by $\dagger$. Bold values indicate the highest AUROC in each column.}}
+\label{tab:flank_ablation}
+\begin{tabular}{rrrrrrr}
+\hline
+\textbf{Flank} & \textbf{Input (bp)} & \textbf{All} & \textbf{Coding} & \textbf{3'~UTR} & \textbf{cCREs} & \textbf{TE} \\
+\hline
+16  & 33  & 0.622 & \textbf{0.625} & 0.619 & \textbf{0.620} & 0.621 \\
+$32^{\dagger}$ & 65 & \textbf{0.625} & 0.616 & \textbf{0.621} & 0.617 & \textbf{0.626} \\
+100 & 201 & 0.617 & 0.610 & 0.616 & 0.617 & 0.616 \\
+\hline
+\end{tabular}
+\end{table*}
+
+\end{document}
