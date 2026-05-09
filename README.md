@@ -1779,6 +1779,7 @@ We used all publicly available MPRA datasets with sufficient variant coverage to
 | Item | Location | Format |
 |------|----------|--------|
 | Source code and scripts | GitHub repo | git |
+| Datasets and models mirror | [McGill PUB server](https://repo.cs.mcgill.ca/PUB/blanchem/GraphyloVar/) | HTTPS directory |
 | Main model (flank=32) | GitHub Release v1.0.0 | `.tar.gz` (TF SavedModel, ~5.3 MB) |
 | Ablation model (flank=16) | GitHub Release v1.0.0 | `.keras` (~7 MB) |
 | Ablation model (flank=100) | GitHub Release v1.0.0 | `.keras` (~7.2 MB) |
