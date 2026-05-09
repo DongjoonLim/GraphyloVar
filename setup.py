@@ -24,6 +24,7 @@ setup(
         "tqdm",
         "pyyaml",
         "biopython",
+        "optree",
     ],
     extras_require={
         "focal": ["focal-loss"],

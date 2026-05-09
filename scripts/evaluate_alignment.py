@@ -38,7 +38,9 @@ from graphylovar.alignment import (
     listify,
     ungap_common,
 )
+from graphylovar import models as _graphylovar_models  # noqa: F401
 from graphylovar.data import extract_windows, label_encode, reverse_complement
+from graphylovar.model_io import resolve_model_path
 from graphylovar.phylogeny import NAMES
 
 
@@ -80,8 +82,9 @@ def main():
     masked[:, 1, :] = 0
 
     # ── Get model predictions ───────────────────────────────────────
-    print(f"Loading model from {args.model_path} ...")
-    model = tf.keras.models.load_model(args.model_path, compile=False)
+    model_path = resolve_model_path(args.model_path)
+    print(f"Loading model from {model_path} ...")
+    model = tf.keras.models.load_model(model_path, compile=False)
     tableM = np.log(np.clip(model.predict(masked, batch_size=256), 1e-10, 1.0))
 
     # ── Run alignments ──────────────────────────────────────────────

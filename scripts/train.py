@@ -23,6 +23,7 @@ import tensorflow as tf
 
 from graphylovar.data import load_cadd_data, prepare_train_val
 from graphylovar.losses import get_loss
+from graphylovar.model_io import normalize_model_path
 from graphylovar.models import build_model
 from graphylovar.phylogeny import build_graph
 from graphylovar.training import train_model
@@ -40,6 +41,10 @@ def main():
     parser.add_argument("--gpu", type=str, default=None)
     parser.add_argument("--data_dir", type=str, default=None)
     parser.add_argument("--model_dir", type=str, default=None)
+    parser.add_argument("--context_flank", type=int, default=None,
+                        help="Override context_flank (half-window around variant)")
+    parser.add_argument("--context", type=int, default=None,
+                        help="Override context (original preprocessing window)")
     args = parser.parse_args()
 
     # ── Load config ─────────────────────────────────────────────────
@@ -57,8 +62,8 @@ def main():
     gpu_id = args.gpu or cfg.get("gpu_id", "3")
     data_dir = args.data_dir or cfg.get("data_dir", "data")
     model_dir = args.model_dir or cfg.get("model_dir", "models")
-    context = cfg.get("context", 100)
-    context_flank = cfg.get("context_flank", 10)
+    context = args.context or cfg.get("context", 100)
+    context_flank = args.context_flank if args.context_flank is not None else cfg.get("context_flank", 10)
     test_size = cfg.get("test_size", 0.2)
     random_state = cfg.get("random_state", 42)
     patience = cfg.get("patience", 7)
@@ -66,7 +71,10 @@ def main():
     focal_alpha = cfg.get("focal_alpha", 0.25)
 
     # ── GPU setup ───────────────────────────────────────────────────
-    os.environ["CUDA_VISIBLE_DEVICES"] = str(gpu_id)
+    if not os.environ.get("CUDA_VISIBLE_DEVICES"):
+        os.environ["CUDA_VISIBLE_DEVICES"] = str(gpu_id)
+    else:
+        print(f"Using pre-set CUDA_VISIBLE_DEVICES={os.environ['CUDA_VISIBLE_DEVICES']}")
     for device in tf.config.experimental.list_physical_devices("GPU"):
         tf.config.experimental.set_memory_growth(device, True)
 
@@ -104,7 +112,7 @@ def main():
     # ── Train ───────────────────────────────────────────────────────
     ctx_label = context_flank * 2 + 1
     save_name = f"{model_name}_{loss_name}_context{ctx_label}_chr{chrom}"
-    save_path = os.path.join(model_dir, save_name)
+    save_path = normalize_model_path(os.path.join(model_dir, save_name))
 
     print(f"\nTraining {model_name} → {save_path}")
     history, model = train_model(

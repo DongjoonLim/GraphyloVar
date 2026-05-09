@@ -90,7 +90,6 @@ EDGES: list[tuple[str, str]] = [
     ("oryCun2", "_OO"), ("ochPri3", "_OO"),
     # Laurasiatheria – Cetartiodactyla
     ("vicPac2", "_VC"), ("camFer1", "_VC"),
-    ("susScr3", "_SVCTOPBOC"),
     ("turTru2", "_TO"), ("orcOrc1", "_TO"),
     ("oviAri3", "_OC"), ("capHir1", "_OC"),
     ("bosTau8", "_BOC"), ("_OC", "_BOC"),
@@ -166,3 +165,85 @@ MASK_INDICES: list[int] = [
     NAMES.index("_HP"),        # 58
     NAMES.index("_HPG"),       # 59
 ]
+
+
+# ── Branch-length distances from hg38 (substitutions / site) ────────
+# Computed from the UCSC hg38 100-way Multiz alignment Newick tree.
+# Values represent the total branch length along the path from hg38
+# to each species (sum of edge lengths, measured in expected
+# substitutions per neutral site).
+BRANCH_LENGTH_FROM_HUMAN: dict[str, float] = {
+    "hg38": 0.000000,
+    "panTro4": 0.013390,
+    "gorGor3": 0.019734,
+    "ponAbe2": 0.039403,
+    "nomLeu3": 0.046204,
+    "rheMac3": 0.079575,
+    "macFas5": 0.079575,
+    "papAnu2": 0.079626,
+    "chlSab2": 0.087974,
+    "calJac3": 0.107454,
+    "saiBol1": 0.087804,
+    "otoGar3": 0.270334,
+    "tupChi1": 0.318845,
+    "speTri2": 0.335427,
+    "jacJac1": 0.409959,
+    "micOch1": 0.510109,
+    "criGri1": 0.510109,
+    "mesAur1": 0.510109,
+    "mm10": 0.502391,
+    "rn6": 0.509471,
+    "hetGla2": 0.347117,
+    "cavPor3": 0.362746,
+    "chiLan1": 0.417117,
+    "octDeg1": 0.457117,
+    "oryCun2": 0.376911,
+    "ochPri3": 0.463753,
+    "susScr3": 0.339399,
+    "vicPac2": 0.327009,
+    "camFer1": 0.319734,
+    "turTru2": 0.329575,
+    "orcOrc1": 0.334575,
+    "panHod1": 0.378479,
+    "bosTau8": 0.388479,
+    "oviAri3": 0.388479,
+    "capHir1": 0.388479,
+    "equCab2": 0.319523,
+    "cerSim1": 0.285126,
+    "felCat8": 0.358583,
+    "canFam3": 0.332429,
+    "musFur1": 0.359971,
+    "ailMel1": 0.359971,
+    "odoRosDiv1": 0.379971,
+    "lepWed1": 0.379971,
+    "pteAle1": 0.337613,
+    "pteVam1": 0.351012,
+    "eptFus1": 0.317613,
+    "myoDav1": 0.387613,
+    "myoLuc2": 0.390153,
+    "eriEur2": 0.465906,
+    "sorAra2": 0.513683,
+    "conCri1": 0.444121,
+    "loxAfr3": 0.345811,
+    "eleEdw1": 0.393569,
+    "triMan1": 0.396579,
+    "chrAsi1": 0.286882,
+    "echTel2": 0.492818,
+    "oryAfe1": 0.246882,
+    "dasNov3": 0.366691,
+}
+
+
+def branch_length_to_human(species_name: str) -> float:
+    """
+    Return the total branch-length distance from hg38 to *species_name*.
+
+    Units are expected substitutions per neutral site, computed from the
+    UCSC hg38 100-way Multiz alignment phylogenetic tree.
+    """
+    if species_name not in BRANCH_LENGTH_FROM_HUMAN:
+        raise KeyError(
+            f"Species '{species_name}' not in BRANCH_LENGTH_FROM_HUMAN. "
+            f"Available: {sorted(BRANCH_LENGTH_FROM_HUMAN)}"
+        )
+    return BRANCH_LENGTH_FROM_HUMAN[species_name]

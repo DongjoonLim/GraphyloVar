@@ -24,6 +24,12 @@ sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 import tensorflow as tf
 
 from graphylovar.data import load_cadd_data, mask_species
+from graphylovar import models as _graphylovar_models  # noqa: F401
+from graphylovar.model_io import (
+    describe_prediction_output,
+    extract_binary_scores,
+    resolve_model_path,
+)
 
 
 def main():
@@ -60,19 +66,22 @@ def main():
     print(f"  X: {X.shape}, y: {y.shape}")
 
     # ── Load model & predict ────────────────────────────────────────
-    print(f"Loading model from {args.model_path} ...")
-    model = tf.keras.models.load_model(args.model_path, compile=False)
+    model_path = resolve_model_path(args.model_path)
+    print(f"Loading model from {model_path} ...")
+    model = tf.keras.models.load_model(model_path, compile=False)
     model.summary()
 
     preds = model.predict(X, batch_size=args.batch_size)
-    print(f"Predictions shape: {preds.shape}")
+    scores = extract_binary_scores(preds)
+    print(f"Raw prediction output: {describe_prediction_output(preds)}")
+    print(f"Score array shape: {scores.shape}")
 
     # ── Save ────────────────────────────────────────────────────────
     if args.output is None:
-        base = os.path.basename(args.model_path)
+        base = os.path.splitext(os.path.basename(model_path))[0]
         args.output = f"predictions_{base}_chr{chrom}.npy"
 
-    np.save(args.output, preds)
+    np.save(args.output, scores)
     print(f"Saved predictions to {args.output}")
 
 

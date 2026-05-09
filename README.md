@@ -786,6 +786,22 @@ import tensorflow as tf
 model = tf.keras.models.load_model('path/to/checkpoint.keras')
 ```
 
+> **Note for the flank=32 model**: Due to mixed-precision training, the released
+> flank=32 checkpoint is stored as a TF SavedModel directory and distributed as
+> `multitask_hybrid_v3_train1-10_val11-12_flank32_v3flank32.tar.gz`.
+> Extract and load it as follows:
+>
+> ```bash
+> tar -xzf multitask_hybrid_v3_train1-10_val11-12_flank32_v3flank32.tar.gz
+> ```
+> ```python
+> import tensorflow as tf
+> model = tf.keras.models.load_model(
+>     'multitask_hybrid_v3_train1-10_val11-12_flank32_v3flank32'
+> )
+> # Requires a GPU — mixed-precision weights are stored in float16
+> ```
+
 ---
 
 ## Monitoring training progress
@@ -1758,10 +1774,31 @@ We used all publicly available MPRA datasets with sufficient variant coverage to
 
 ## Data availability
 
-- **TOPMed whole-genome sequencing data**: dbGaP accession phs000964
+### What is on GitHub / GitHub Releases
+
+| Item | Location | Format |
+|------|----------|--------|
+| Source code and scripts | GitHub repo | git |
+| Main model (flank=32) | GitHub Release v1.0.0 | `.tar.gz` (TF SavedModel, ~5.3 MB) |
+| Ablation model (flank=16) | GitHub Release v1.0.0 | `.keras` (~7 MB) |
+| Ablation model (flank=100) | GitHub Release v1.0.0 | `.keras` (~7.2 MB) |
+
+The flank=32 main model is a TF SavedModel directory distributed as a tar.gz due to mixed-precision (float16) weights. See the [Checkpoints and model saving](#checkpoints-and-model-saving) section for loading instructions.
+
+### What is NOT on GitHub (too large or access-controlled)
+
+| Item | How to obtain |
+|------|--------------|
+| Preprocessed labels (`topmed_compact_full/`, ~14 TB) | Apply for dbGaP access (phs000964), then run the preprocessing script in `scripts/preprocess_topmed.py` |
+| UCSC alignment cache (`topmed_alignment_cache/`, ~130 GB) | Download UCSC 100-way MAF (see [Data sources and download](#data-sources-and-download)), then run `scripts/build_alignment_cache.py` |
+| Raw UCSC MAF files (`conservation/data/`, ~1.4 TB) | Download from https://hgdownload.soe.ucsc.edu/goldenPath/hg38/multiz100way/ |
+| TOPMed VCF files | Apply for dbGaP access (phs000964) |
+
+### External data sources
+
+- **TOPMed whole-genome sequencing data**: dbGaP accession phs000964 (requires institutional affiliation and IRB approval)
 - **UCSC 100-way vertebrate alignments**: https://hgdownload.soe.ucsc.edu/goldenPath/hg38/multiz100way/
 - **Ancestral sequence reconstruction (Ancestors1.0)**: https://ancestors1.cs.mcgill.ca/
-- **Trained model weights and code**: https://github.com/DongjoonLim/GraphyloVar
 
 ---
 

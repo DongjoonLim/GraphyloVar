@@ -23,17 +23,18 @@ SNP probability), each with their own 64-unit dense layer.
 This architectural change allows the model to learn species-specific weights
 that reflect evolutionary importance. \rev{An additive perturbation analysis
 (each species evaluated against an all-gap baseline on 500,000 held-out
-variants) reveals that 53 of 58 extant placental mammals contribute positive
+variants) shows that 53 of 58 extant placental mammals contribute positive
 isolated signal, with Human providing the largest contribution ($\Delta$CE
 $= 7.1$). Four diverged primates, Orangutan, Green monkey, Gorilla, and
 Gibbon, form a secondary cluster ($\Delta$CE $= 0.62$ to $1.50$), and
 non-primate mammals contribute a broad gradient ($\Delta$CE $= 0.002$ to $0.12$).
-Chimpanzee ranks 11th ($\Delta$CE $= 0.062$) despite its closest evolutionary
-proximity, because its $\approx$98.7\% sequence identity with Human yields
+Chimpanzee ranks 11th ($\Delta$CE $= 0.062$) despite being the closest relative
+of Human, because its $\approx$98.7\% sequence identity with Human yields
 near-zero marginal (leave-one-out) contribution, reflecting information
 redundancy with the Human row (see Section~3.6). Five species (Baboon,
-Rhesus macaque, Marmoset, Squirrel monkey, Jerboa) show marginally negative
-additive values, likely due to sparse alignment coverage at the tested
-variant sites.} The GCN thus provides an
-interpretable mechanism for weighting conservation signals across the
-phylogenetic tree, rather than assuming uniform contribution from all species.
+Rhesus macaque, Marmoset, Squirrel monkey, Jerboa) show near-zero or marginally
+negative additive values, likely due to sparse alignment coverage at the tested
+variant sites.} The GCN thus provides an interpretable mechanism for weighting
+conservation signals across the phylogenetic tree, rather than assuming uniform
+contribution from all species.
+

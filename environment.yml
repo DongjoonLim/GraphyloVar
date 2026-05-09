@@ -5,8 +5,9 @@ channels:
   - defaults
 dependencies:
   - python>=3.8
-  - numpy>=1.20
+  - numpy>=1.20,<2
   - pandas>=1.3
+  - scipy>=1.8
   - scikit-learn
   - biopython
   - tqdm
@@ -17,5 +18,6 @@ dependencies:
   - pip
   - pip:
     - tensorflow>=2.6
+    - optree>=0.11
     - spektral>=1.1
-    - focal_loss
+    - focal-loss

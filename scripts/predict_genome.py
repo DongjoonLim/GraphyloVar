@@ -31,7 +31,9 @@ from tqdm import tqdm
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
+from graphylovar import models as _graphylovar_models  # noqa: F401
 from graphylovar.data import label_encode, reverse_complement, mask_species
+from graphylovar.model_io import extract_binary_scores, resolve_model_path
 from graphylovar.phylogeny import NAMES
 
 
@@ -90,9 +92,7 @@ def predict_window(
 
     X = np.array(examples, dtype=np.uint8)
     X = mask_species(X)
-    predictions = model.predict(X, batch_size=batch_size)
-    if predictions.ndim == 2 and predictions.shape[1] == 2:
-        predictions = predictions[:, 1]
+    predictions = extract_binary_scores(model.predict(X, batch_size=batch_size))
 
     return indices_start, indices_end, predictions
 
@@ -141,8 +141,9 @@ def main():
     os.environ["CUDA_VISIBLE_DEVICES"] = args.gpu
 
     # ── Load model ──────────────────────────────────────────────────
-    print(f"Loading model: {args.model_path}")
-    model = tf.keras.models.load_model(args.model_path, compile=False)
+    model_path = resolve_model_path(args.model_path)
+    print(f"Loading model: {model_path}")
+    model = tf.keras.models.load_model(model_path, compile=False)
 
     # ── Load alignment ──────────────────────────────────────────────
     pkl = os.path.join(args.alignment_dir, f"seqDictPad_chr{args.chrom}.pkl")

@@ -18,6 +18,8 @@ import matplotlib.pyplot as plt
 import numpy as np
 import tensorflow as tf
 
+from graphylovar.model_io import normalize_model_path
+
 
 def train_model(
     model: tf.keras.Model,
@@ -42,7 +44,7 @@ def train_model(
     y_train    : training labels (one-hot, shape (N,2))
     X_val      : validation features
     y_val      : validation labels
-    save_path  : where to save the best checkpoint (no extension needed)
+    save_path  : where to save the best checkpoint (`.keras` is added if needed)
     epochs     : maximum number of epochs
     batch_size : mini-batch size
     patience   : early-stopping patience
@@ -53,6 +55,7 @@ def train_model(
     -------
     (history, model) — the History object and the best-weights model
     """
+    save_path = normalize_model_path(save_path)
     os.makedirs(os.path.dirname(save_path) or ".", exist_ok=True)
 
     callbacks = [
